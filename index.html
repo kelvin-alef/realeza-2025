@@ -8,7 +8,6 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <!-- Tela de configuração -->
   <div id="setupScreen" class="screen active">
     <h1>⚙️ Configuração dos Times</h1>
     <form id="teamForm">
@@ -18,32 +17,45 @@
     </form>
   </div>
 
-  <!-- Tela principal -->
   <div id="gameScreen" class="screen">
     <header>
-      <h1 id="title">Realeza 2025
-        <span id="ballContainer">
-  	  <img id="volleyball" src="bola.png" alt="Bola Mikasa">
-        </span>
+      <h1 id="title">
+        <img id="crown" src="coroa.png" alt="Coroa">
+        Realeza 2025
       </h1>
     </header>
 
     <main class="main-container">
-      <!-- Esquerda: Quadra -->
       <div id="court">
-        <div id="kingCard" class="team-card king">
-          <h2>King 👑</h2>
-          <p id="kingName"></p>
-          <p>Pontos: <span id="kingPoints">0</span></p>
+        <h2>QUADRA PRINCIPAL</h2>
+        <div id="courtDisplay">
+          <div id="kingSide">
+            <span class="side-label">LADO DO REI 👑</span>
+            <div id="kingCard" class="team-card king">
+              <p id="kingName"></p>
+            </div>
+            </div>
+          <div id="challengerSide">
+            <span class="side-label">LADO DESAFIANTE ❌</span>
+            <div id="challengerList" class="challenger-list"></div>
+          </div>
+          <img id="volleyball" src="bola.png" alt="Bola Mikasa">
         </div>
-        <div id="challengerList" class="challenger-list"></div>
-        <button id="addPoints">+1 ponto ao King</button>
+        <div id="courtFooter">
+          <p id="matchScore">REI <span id="kingPoints">0</span> - DES. <span id="challengerPoints">0</span></p>
+          <button id="addPoints" class="action-btn">+1 Ponto ao Rei</button>
+          <button id="winRally" class="action-btn">Desafiante Ganha</button>
+        </div>
       </div>
 
-      <!-- Direita: Placar Geral -->
       <div id="scoreBoard">
-        <h2>Ranking Geral</h2>
+        <h2><img src="coroa.png" alt="Troféu" style="width: 30px; vertical-align: middle;"> RANKING GERAL</h2>
         <div id="rankingList"></div>
+        <hr>
+        <div id="infoBoard">
+          <h3>PRÓXIMA RODADA</h3>
+          <p id="timer">TEMPO RESTANTE: 00:00</p>
+          </div>
       </div>
     </main>
   </div>
