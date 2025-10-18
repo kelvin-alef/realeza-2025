@@ -13,11 +13,13 @@
     <form id="teamForm">
       <div id="teamsContainer"></div>
       
+      <button type="button" id="addTeam">+ Adicionar Time</button>
+      
       <div class="timer-config">
           <label for="gameDuration">Duração da Partida (minutos):</label>
           <input type="number" id="gameDuration" value="15" min="1" required>
       </div>
-      <button type="button" id="addTeam">+ Adicionar Time</button>
+      
       <button type="submit" class="start-btn">Iniciar Partida</button>
     </form>
   </div>
@@ -25,8 +27,7 @@
   <div id="gameScreen" class="screen">
     <header>
       <h1 id="title">
-        <img id="crown" src="coroa.png" alt="Coroa">
-        Realeza 2025
+        👑 Realeza 2025
       </h1>
     </header>
 
@@ -49,20 +50,21 @@
         <div id="courtFooter">
           <p id="matchScore">PONTOS TOTAIS: <span id="kingPointsDisplay">0</span></p>
           <button id="addPoints" class="action-btn">+1 Ponto ao Rei</button>
-          </div>
+        </div>
       </div>
 
       <div id="scoreBoard">
-        <h2><img src="coroa.png" alt="Troféu" style="width: 30px; vertical-align: middle;"> RANKING GERAL</h2>
+        <h2>👑 RANKING GERAL</h2>
         <div id="rankingList"></div>
         <hr>
         
         <div id="infoBoard">
           <h3>PRÓXIMA RODADA</h3>
           
-          <button id="startTimerBtn" class="action-btn" style="margin-bottom: 10px;">Iniciar Cronômetro</button>
-          
-          <p id="timer">TEMPO RESTANTE: <span id="timeValue">00:00</span></p>
+          <div class="timer-display-group">
+            <p id="timer">TEMPO RESTANTE: <span id="timeValue">00:00</span></p>
+            <button id="startTimerBtn" class="action-btn timer-control-btn">▶️</button>
+          </div>
           
           <button id="nextRoundBtn" class="start-btn">Próxima Rodada</button>
         </div>

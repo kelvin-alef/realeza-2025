@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: sans-serif; 
   background-color: #0d1a26; 
   color: #fff;
   overflow: hidden; 
@@ -37,21 +37,25 @@ header h1 {
   text-shadow: 2px 2px #000;
 }
 
-#crown {
-  width: 50px; 
-}
+/* Removido o estilo para #crown */
 
-/* Tela de configuração */
+/* Tela de configuração (AJUSTADO PARA O NOVO LAYOUT DO FORM) */
 #setupScreen {
   justify-content: center;
   align-items: center;
   text-align: center;
   padding: 2rem;
 }
+#teamForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaçamento entre os elementos */
+    align-items: center;
+}
 
-/* Estilo para a configuração do timer (NOVO) */
+/* Estilo para a configuração do timer */
 .timer-config {
-    margin: 1rem 0;
+    margin: 0; /* Removido margin para usar o gap do form */
     font-size: 1.1rem;
     display: flex;
     align-items: center;
@@ -73,7 +77,7 @@ header h1 {
 
 /* Estilos de botões */
 button {
-  margin: 10px;
+  margin: 0; /* Removido margin para usar o gap do form/display group */
   padding: 12px 25px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -115,7 +119,8 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
 }
 
 #courtDisplay {
-  background-image: url('quadra.jpg');
+  /* MODIFICADO: Nome do arquivo de fundo */
+  background-image: url('background.jpg');
   background-size: cover;
   background-position: center center;
   width: 90%;
@@ -130,67 +135,7 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
   justify-content: space-between;
 }
 
-/* AUMENTO DE DESTAQUE PARA O REI (AJUSTADO) */
-#kingCard {
-  background: transparent !important; 
-  border: none;
-  box-shadow: none;
-  font-size: 2.5rem; /* Aumentado */
-  font-weight: 900; /* Extra Bold */
-  color: gold;
-  margin: 10px auto;
-  max-width: 80%;
-  text-shadow: 0 0 5px #000, 0 0 10px rgba(255, 215, 0, 0.5); /* Sombra de brilho */
-}
-#kingCard p { margin: 0; }
-
-.side-label {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 8px 20px;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #ffd700;
-}
-
-.challenger-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  padding: 10px;
-}
-
-/* AUMENTO DE DESTAQUE PARA DESAFIANTES (AJUSTADO) */
-.challenger {
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  border: 1px solid #334455;
-  font-weight: 700; /* Mais destaque */
-  font-size: 1.1rem; /* Aumentado */
-  padding: 15px; /* Mais padding */
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.2s;
-}
-
-.challenger:hover {
-    transform: scale(1.05);
-    background: rgba(26, 42, 58, 0.9);
-}
-
-#courtFooter {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    margin-top: 15px;
-}
-
-#matchScore {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #fff;
-}
+/* ... estilos da quadra ... */
 
 /* Placar geral (Lado Direito) */
 #scoreBoard {
@@ -201,26 +146,45 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
   box-shadow: -4px 0 6px rgba(0, 0, 0, 0.4);
 }
 
-#infoBoard {
-    text-align: center;
-    padding: 15px 0;
+/* NOVO: Estilos para o grupo de tempo e botão de play */
+.timer-display-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.timer-control-btn {
+    padding: 10px 15px;
+    font-size: 1.5rem;
+    line-height: 1; 
+    width: auto;
 }
 
-#infoBoard h3 {
-    color: #00cc66;
-    margin-top: 10px;
-    font-size: 1.4rem;
-}
-
-/* DESTAQUE DO TEMPO (AJUSTADO) */
+/* Destaque do tempo */
 #timer {
-    font-size: 2rem; /* Aumentado */
+    font-size: 2rem; 
     font-weight: bold;
-    color: #00cc66; /* Verde para o tempo */
+    color: #fff; /* Começa branco */
     background: #334455;
     padding: 5px 10px;
     border-radius: 5px;
     margin-top: 5px;
 }
 
-/* ... demais estilos ... */
+/* Ranking Geral (AJUSTADO PARA MAIOR DESTAQUE) */
+.rank-item {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr; /* Posição | Nome | Pontos */
+  align-items: center;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  background-color: #334455 !important;
+}
+
+/* MODIFICADO: Aumento do nome da equipe */
+.rank-item span:nth-child(2) {
+    font-size: 1.4rem; 
+    font-weight: bold;
+}
