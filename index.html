@@ -12,6 +12,11 @@
     <h1>⚙️ Configuração dos Times</h1>
     <form id="teamForm">
       <div id="teamsContainer"></div>
+      
+      <div class="timer-config">
+          <label for="gameDuration">Duração da Partida (minutos):</label>
+          <input type="number" id="gameDuration" value="15" min="1" required>
+      </div>
       <button type="button" id="addTeam">+ Adicionar Time</button>
       <button type="submit" class="start-btn">Iniciar Partida</button>
     </form>
@@ -34,28 +39,34 @@
             <div id="kingCard" class="team-card king">
               <p id="kingName"></p>
             </div>
-            </div>
+          </div>
           <div id="challengerSide">
-            <span class="side-label">LADO DESAFIANTE ❌</span>
+            <span class="side-label">LADO DESAFIANTE ⚔️</span>
             <div id="challengerList" class="challenger-list"></div>
           </div>
           <img id="volleyball" src="bola.png" alt="Bola Mikasa">
         </div>
+        
         <div id="courtFooter">
-          <p id="matchScore">REI <span id="kingPoints">0</span> - DES. <span id="challengerPoints">0</span></p>
+          <p id="matchScore">PONTOS TOTAIS: <span id="kingPointsDisplay">0</span></p>
           <button id="addPoints" class="action-btn">+1 Ponto ao Rei</button>
-          <button id="winRally" class="action-btn">Desafiante Ganha</button>
-        </div>
+          </div>
       </div>
 
       <div id="scoreBoard">
         <h2><img src="coroa.png" alt="Troféu" style="width: 30px; vertical-align: middle;"> RANKING GERAL</h2>
         <div id="rankingList"></div>
         <hr>
+        
         <div id="infoBoard">
           <h3>PRÓXIMA RODADA</h3>
-          <p id="timer">TEMPO RESTANTE: 00:00</p>
-          </div>
+          
+          <button id="startTimerBtn" class="action-btn" style="margin-bottom: 10px;">Iniciar Cronômetro</button>
+          
+          <p id="timer">TEMPO RESTANTE: <span id="timeValue">00:00</span></p>
+          
+          <button id="nextRoundBtn" class="start-btn">Próxima Rodada</button>
+        </div>
       </div>
     </main>
   </div>
