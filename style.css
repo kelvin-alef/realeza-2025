@@ -1,0 +1,185 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #111;
+  color: #fff;
+}
+
+.screen {
+  display: none;
+  padding: 2rem;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* Header */
+header {
+  background-color: #222;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header h1 {
+  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+#ballContainer {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+#volleyball {
+  width: 80px;
+  height: 80px;
+  animation: spin 3s linear infinite;
+}
+
+#crown {
+  width: 40px;
+  position: absolute;
+  top: -20px;
+  left: 20px;
+  animation: crownBounce 1.5s infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+@keyframes crownBounce {
+  0%, 100% { transform: translateY(0);}
+  50% { transform: translateY(-10px);}
+}
+
+/* Tela de configuração */
+#teamForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.team-input {
+  display: flex;
+  align-items: center;
+  background: #222;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 10px;
+  gap: 10px;
+}
+
+.team-input input[type="text"] {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  width: 150px;
+}
+
+.team-input input[type="color"] {
+  width: 50px;
+  height: 30px;
+  border: none;
+}
+
+.remove-btn {
+  background: red;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.start-btn { background: limegreen; color: #000; }
+button:hover { opacity: 0.8; }
+
+/* Main container dividido */
+.main-container {
+  display: flex;
+  height: calc(100vh - 250px);
+}
+
+#court {
+  flex: 2;
+  background-image: url('quadra.jpg');
+  background-size: cover;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.team-card {
+  background: #333;
+  padding: 1rem 2rem;
+  border-radius: 15px;
+  width: 300px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.king {
+  border: 4px solid gold;
+  box-shadow: 0 0 20px gold;
+}
+
+.challenger-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.challenger {
+  background: #444;
+  padding: 10px;
+  border-radius: 10px;
+  width: 200px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.challenger:hover { transform: scale(1.05); }
+
+/* Placar geral */
+#scoreBoard {
+  flex: 1;
+  background: #222;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+#rankingList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rank-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+}

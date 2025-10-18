@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Realeza 2025</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <!-- Tela de configuração -->
+  <div id="setupScreen" class="screen active">
+    <h1>⚙️ Configuração dos Times</h1>
+    <form id="teamForm">
+      <div id="teamsContainer"></div>
+      <button type="button" id="addTeam">+ Adicionar Time</button>
+      <button type="submit" class="start-btn">Iniciar Partida</button>
+    </form>
+  </div>
+
+  <!-- Tela principal -->
+  <div id="gameScreen" class="screen">
+    <header>
+      <h1 id="title">Realeza 2025
+        <span id="ballContainer">
+  	  <img id="volleyball" src="bola.png" alt="Bola Mikasa">
+        </span>
+      </h1>
+    </header>
+
+    <main class="main-container">
+      <!-- Esquerda: Quadra -->
+      <div id="court">
+        <div id="kingCard" class="team-card king">
+          <h2>King 👑</h2>
+          <p id="kingName"></p>
+          <p>Pontos: <span id="kingPoints">0</span></p>
+        </div>
+        <div id="challengerList" class="challenger-list"></div>
+        <button id="addPoints">+1 ponto ao King</button>
+      </div>
+
+      <!-- Direita: Placar Geral -->
+      <div id="scoreBoard">
+        <h2>Ranking Geral</h2>
+        <div id="rankingList"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
