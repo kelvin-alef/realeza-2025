@@ -1,7 +1,7 @@
 let teams = [];
 let kingIndex = 0;
 let totalGameDuration = 0; // Duração total em segundos
-let timerInterval = null; // Inicializado como null
+let timerInterval = null;
 let timeLeft;
 
 // --- Tela de configuração ---
@@ -32,6 +32,7 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
   teams = [];
   const inputs = teamsContainer.querySelectorAll(".team-input");
   inputs.forEach((input, i) => {
+    // Busca os inputs dentro do elemento input da vez
     const name = input.querySelector('input[type="text"]').value || `Time ${i+1}`;
     const color = input.querySelector('input[type="color"]').value;
     teams.push({ name, color, points: 0, id: i });
@@ -47,27 +48,25 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
   gameScreen.classList.add("active");
   renderTeams();
   renderRanking();
-  updateTimerDisplay(); // Exibe o tempo inicial
+  updateTimerDisplay(); 
   
-  // Reseta o visual do botão do cronômetro
   startTimerBtn.textContent = '▶️';
-  startTimerBtn.style.backgroundColor = '#ff9900';
+  startTimerBtn.style.backgroundColor = 'none'; // Reseta o estilo de fundo
   timeValueEl.style.color = '#fff';
 });
 
 // --- Tela principal ---
 const kingNameEl = document.getElementById("kingName");
+// REMOVIDO: kingPointsEl (não é mais necessário)
 const kingCardEl = document.getElementById("kingCard");
 const challengerListEl = document.getElementById("challengerList");
 const rankingListEl = document.getElementById("rankingList");
-const matchScoreEl = document.getElementById("matchScore");
-const kingPointsDisplayEl = document.getElementById("kingPointsDisplay");
 
 function renderTeams() {
   const king = teams[kingIndex];
   kingNameEl.textContent = king.name;
   
-  matchScoreEl.innerHTML = `PONTOS TOTAIS: <span style="color: #ffd700;">${king.points}</span>`;
+  // REMOVIDO: Atualização de placar simplificado
   
   kingCardEl.style.backgroundColor = king.color;
 
@@ -77,7 +76,8 @@ function renderTeams() {
       const div = document.createElement("div");
       div.classList.add("challenger");
       div.style.backgroundColor = team.color;
-      div.innerHTML = `<p style="margin: 0;">${team.name}</p>`;
+      // Nome do desafiante (destaque via CSS)
+      div.innerHTML = `<p>${team.name}</p>`;
       
       div.addEventListener("click", () => {
         swapKing(i);
@@ -128,32 +128,31 @@ function formatTime(seconds) {
 
 function updateTimerDisplay() {
     timeValueEl.textContent = formatTime(timeLeft);
-    if (timeLeft <= 10 && timeLeft > 0) { // Alerta visual de 10 segundos
+    // As cores agora são tratadas no CSS para o display do tempo
+    if (timeLeft <= 10 && timeLeft > 0) {
         timeValueEl.style.color = 'red';
     } else if (timeLeft > 10) {
         timeValueEl.style.color = '#00cc66';
+    } else if (timeLeft <= 0) {
+        timeValueEl.style.color = 'red';
     }
 }
 
 function startTimer() {
     if (timerInterval) {
-        // Se estiver rodando (botão é ⏹️), pausa/para
         clearInterval(timerInterval);
         timerInterval = null;
-        startTimerBtn.textContent = '▶️'; // Volta para Play
-        startTimerBtn.style.backgroundColor = '#ff9900';
-        updateTimerDisplay(); // Garante que a cor do texto permanece a mesma
+        startTimerBtn.textContent = '▶️'; 
+        startTimerBtn.style.color = '#ff9900'; // Cor do Play
         return;
     }
 
     if (timeLeft <= 0) {
-        // Se acabou (ou é o primeiro início), reinicia o tempo
         timeLeft = totalGameDuration;
     }
     
-    // Inicia a contagem (botão vira ⏹️)
     startTimerBtn.textContent = '⏹️'; 
-    startTimerBtn.style.backgroundColor = '#cc0000'; // Cor de stop
+    startTimerBtn.style.color = '#cc0000'; // Cor do Stop
 
     timerInterval = setInterval(() => {
         timeLeft--;
@@ -162,10 +161,8 @@ function startTimer() {
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             timerInterval = null;
-            startTimerBtn.textContent = '▶️'; // Fim -> Volta para Play
-            startTimerBtn.style.backgroundColor = '#ff9900';
-            timeValueEl.style.color = 'red';
-            // Opcional: alert("Tempo esgotado! Fim da rodada.");
+            startTimerBtn.textContent = '▶️';
+            startTimerBtn.style.color = '#ff9900'; 
         }
     }, 1000);
 }
@@ -177,9 +174,8 @@ const nextRoundBtn = document.getElementById("nextRoundBtn");
 
 function nextRound() {
     if (timerInterval) clearInterval(timerInterval);
-    timerInterval = null; // Garante que o intervalo é zerado
+    timerInterval = null;
     
-    // Reseta inputs dinâmicos
     teamsContainer.innerHTML = ''; 
     
     // Adiciona times iniciais padrão
@@ -188,13 +184,12 @@ function nextRound() {
     teamsContainer.appendChild(createTeamInput(3));
     gameDurationInput.value = 15;
     
-    // Volta para a tela de configuração
     gameScreen.classList.remove("active");
     setupScreen.classList.add("active");
     
     // Reseta o visual do botão do cronômetro
     startTimerBtn.textContent = '▶️';
-    startTimerBtn.style.backgroundColor = '#ff9900';
+    startTimerBtn.style.color = '#ff9900';
     timeValueEl.style.color = '#fff';
 }
 

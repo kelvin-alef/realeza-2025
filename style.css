@@ -37,9 +37,7 @@ header h1 {
   text-shadow: 2px 2px #000;
 }
 
-/* Removido o estilo para #crown */
-
-/* Tela de configuração (AJUSTADO PARA O NOVO LAYOUT DO FORM) */
+/* Tela de configuração */
 #setupScreen {
   justify-content: center;
   align-items: center;
@@ -49,13 +47,12 @@ header h1 {
 #teamForm {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Espaçamento entre os elementos */
+    gap: 15px; 
     align-items: center;
 }
 
-/* Estilo para a configuração do timer */
 .timer-config {
-    margin: 0; /* Removido margin para usar o gap do form */
+    margin: 0; 
     font-size: 1.1rem;
     display: flex;
     align-items: center;
@@ -77,7 +74,7 @@ header h1 {
 
 /* Estilos de botões */
 button {
-  margin: 0; /* Removido margin para usar o gap do form/display group */
+  margin: 0;
   padding: 12px 25px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -90,6 +87,7 @@ button {
 .start-btn { background: #00cc66; color: #000; }
 .action-btn { background: #ff9900; color: #000; }
 button:hover { opacity: 0.9; transform: translateY(-1px); }
+
 
 /* Main container dividido */
 .main-container {
@@ -119,7 +117,7 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
 }
 
 #courtDisplay {
-  /* MODIFICADO: Nome do arquivo de fundo */
+  /* MODIFICADO: Referência à imagem background.jpg */
   background-image: url('background.jpg');
   background-size: cover;
   background-position: center center;
@@ -135,7 +133,72 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
   justify-content: space-between;
 }
 
-/* ... estilos da quadra ... */
+/* NOVO: Destaque maior para o LADO DO REI/DESAFIANTE */
+.side-label {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 25px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1.4rem; /* Aumentado */
+    color: #ffd700;
+}
+
+/* Destaque do Nome do Rei */
+#kingCard {
+  background: transparent !important; 
+  border: none;
+  box-shadow: none;
+  font-size: 2.8rem; /* Aumentado */
+  font-weight: 900;
+  color: gold;
+  margin: 10px auto;
+  max-width: 80%;
+  text-shadow: 0 0 5px #000, 0 0 10px rgba(255, 215, 0, 0.5); 
+}
+#kingCard p { margin: 0; }
+
+
+/* NOVO: Estilo para a caixa dos desafiantes (retangular, com padding) */
+.challenger-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  /* NOVO: Permite até 4 times por linha (em telas largas) */
+  max-width: 100%; 
+}
+
+.challenger {
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border: 1px solid #334455;
+  font-weight: 700;
+  font-size: 1.1rem; 
+  padding: 15px 5px; /* Mais espaço vertical */
+  cursor: pointer;
+  text-align: center; /* Centralizado */
+  transition: all 0.2s;
+  flex: 1 1 20%; /* Tenta caber 4 elementos, sendo 25% - 10px de gap */
+  min-width: 100px;
+  max-width: 150px;
+}
+
+.challenger p {
+    margin: 5px 0; /* Mais espaço dentro da caixa */
+}
+
+.challenger:hover {
+    transform: scale(1.05);
+    background: rgba(26, 42, 58, 0.9);
+}
+
+#courtFooter {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 15px;
+}
 
 /* Placar geral (Lado Direito) */
 #scoreBoard {
@@ -146,7 +209,18 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
   box-shadow: -4px 0 6px rgba(0, 0, 0, 0.4);
 }
 
-/* NOVO: Estilos para o grupo de tempo e botão de play */
+#infoBoard {
+    text-align: center;
+    padding: 15px 0;
+}
+
+#infoBoard h3 {
+    color: #00cc66;
+    margin-top: 10px;
+    font-size: 1.4rem;
+}
+
+/* Estilos para o grupo de tempo e botão de play */
 .timer-display-group {
     display: flex;
     align-items: center;
@@ -154,36 +228,45 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
     gap: 10px;
     margin-bottom: 20px;
 }
+
+/* MODIFICADO: Botão de Play sem fundo, apenas ícone */
 .timer-control-btn {
     padding: 10px 15px;
     font-size: 1.5rem;
     line-height: 1; 
     width: auto;
+    background: none; /* Fundo removido */
+    color: #ff9900;
+}
+.timer-control-btn:hover {
+    opacity: 0.7;
+    background: rgba(255, 255, 255, 0.1); /* Um leve highlight ao passar o mouse */
 }
 
-/* Destaque do tempo */
+
+/* MODIFICADO: Destaque do tempo (Menor) */
 #timer {
-    font-size: 2rem; 
+    font-size: 1.5rem; /* Reduzido de 2rem para 1.5rem */
     font-weight: bold;
-    color: #fff; /* Começa branco */
+    color: #fff; 
     background: #334455;
     padding: 5px 10px;
     border-radius: 5px;
     margin-top: 5px;
 }
 
-/* Ranking Geral (AJUSTADO PARA MAIOR DESTAQUE) */
+/* Ranking Geral */
 .rank-item {
   display: grid;
-  grid-template-columns: 1fr 4fr 1fr; /* Posição | Nome | Pontos */
+  grid-template-columns: 1fr 4fr 1fr;
   align-items: center;
   padding: 8px 15px;
   border-radius: 5px;
   font-size: 1.2rem;
-  background-color: #334455 !important;
+  background-color: #334455;
 }
 
-/* MODIFICADO: Aumento do nome da equipe */
+/* Aumento do nome da equipe */
 .rank-item span:nth-child(2) {
     font-size: 1.4rem; 
     font-weight: bold;
