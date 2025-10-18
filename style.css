@@ -117,7 +117,6 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
 }
 
 #courtDisplay {
-  /* MODIFICADO: Referência à imagem background.jpg */
   background-image: url('background.jpg');
   background-size: cover;
   background-position: center center;
@@ -131,100 +130,117 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  padding: 10px 0; /* Padding vertical para dar espaço aos labels */
 }
 
-/* NOVO: Destaque maior para o LADO DO REI/DESAFIANTE */
+/* NOVO: Posicionamento dos labels LADO REALEZA / LADO DESAFIANTE */
 .side-label {
     background: rgba(0, 0, 0, 0.7);
     padding: 10px 25px;
     border-radius: 10px;
     font-weight: bold;
-    font-size: 1.4rem; /* Aumentado */
+    font-size: 1.4rem;
     color: #ffd700;
+    /* NOVO: Posicionamento absoluto dentro de #courtDisplay */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
 }
+
+.top-label {
+    top: 5px; /* Posição no topo */
+}
+
+.bottom-label {
+    bottom: 5px; /* Posição na base */
+}
+
+/* NOVO: Estilo da Caixa do Time (Rei e Desafiantes) */
+.team-card, .challenger {
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border: 3px solid #ff9900; /* Borda para destacar */
+    font-weight: 700;
+    font-size: 1.1rem; 
+    padding: 10px 5px; /* Mais espaço vertical */
+    text-align: center; 
+    border-radius: 5px;
+    text-shadow: 1px 1px 2px #000; /* Sombra para melhorar legibilidade */
+}
+
+/* Layout dos Times DENTRO da Quadra */
+#kingSide, #challengerSide {
+    width: 100%;
+    /* Flex grow/shrink/basis para posicionar no espaço */
+}
+
+#kingSide {
+    /* Ocupa a metade superior */
+    flex: 1 1 50%; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#challengerSide {
+    /* Ocupa a metade inferior */
+    flex: 1 1 50%; 
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Alinhar na parte inferior da quadra */
+    padding-bottom: 50px; /* Ajuste para não colidir com o label inferior */
+}
+
 
 /* Destaque do Nome do Rei */
 #kingCard {
-  background: transparent !important; 
-  border: none;
-  box-shadow: none;
-  font-size: 2.8rem; /* Aumentado */
+  /* Substitui os estilos anteriores, usa o estilo .team-card */
+  background: transparent !important; /* Cor real virá do JS */
+  border: 3px solid gold;
+  box-shadow: 0 0 10px gold;
+  font-size: 2.8rem;
   font-weight: 900;
-  color: gold;
-  margin: 10px auto;
-  max-width: 80%;
-  text-shadow: 0 0 5px #000, 0 0 10px rgba(255, 215, 0, 0.5); 
+  color: white;
+  margin: 0;
+  padding: 15px 20px;
+  width: auto;
+  min-width: 150px;
 }
 #kingCard p { margin: 0; }
 
-
-/* NOVO: Estilo para a caixa dos desafiantes (retangular, com padding) */
+/* Organização dos Desafiantes */
 .challenger-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 15px; /* Espaço entre as caixas */
   padding: 10px;
-  /* NOVO: Permite até 4 times por linha (em telas largas) */
-  max-width: 100%; 
+  max-width: 90%; 
 }
 
 .challenger {
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  border: 1px solid #334455;
-  font-weight: 700;
-  font-size: 1.1rem; 
-  padding: 15px 5px; /* Mais espaço vertical */
   cursor: pointer;
-  text-align: center; /* Centralizado */
-  transition: all 0.2s;
-  flex: 1 1 20%; /* Tenta caber 4 elementos, sendo 25% - 10px de gap */
-  min-width: 100px;
-  max-width: 150px;
+  transition: transform 0.2s;
+  /* NOVO: Tenta forçar 4 por linha (20%) */
+  flex: 1 1 20%; 
+  min-width: 120px;
+  max-width: 180px;
 }
 
 .challenger p {
-    margin: 5px 0; /* Mais espaço dentro da caixa */
-}
-
-.challenger:hover {
-    transform: scale(1.05);
-    background: rgba(26, 42, 58, 0.9);
-}
-
-#courtFooter {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    margin-top: 15px;
+    margin: 5px 0; 
+    font-size: 1.2rem;
 }
 
 /* Placar geral (Lado Direito) */
-#scoreBoard {
-  flex: 1; 
-  background: #1a2a3a;
-  padding: 20px;
-  overflow-y: auto;
-  box-shadow: -4px 0 6px rgba(0, 0, 0, 0.4);
-}
-
-#infoBoard {
-    text-align: center;
-    padding: 15px 0;
-}
-
-#infoBoard h3 {
-    color: #00cc66;
-    margin-top: 10px;
-    font-size: 1.4rem;
-}
+/* ... (estilos existentes) ... */
 
 /* Estilos para o grupo de tempo e botão de play */
 .timer-display-group {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Centraliza o grupo */
     gap: 10px;
     margin-bottom: 20px;
 }
@@ -235,39 +251,51 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
     font-size: 1.5rem;
     line-height: 1; 
     width: auto;
-    background: none; /* Fundo removido */
+    background: none; 
     color: #ff9900;
 }
 .timer-control-btn:hover {
     opacity: 0.7;
-    background: rgba(255, 255, 255, 0.1); /* Um leve highlight ao passar o mouse */
+    background: rgba(255, 255, 255, 0.1); 
 }
-
 
 /* MODIFICADO: Destaque do tempo (Menor) */
 #timer {
-    font-size: 1.5rem; /* Reduzido de 2rem para 1.5rem */
+    font-size: 1.5rem; 
     font-weight: bold;
     color: #fff; 
+    background: none; /* Fundo removido para centralizar */
+    padding: 0;
+    margin: 0;
+}
+#timer span {
     background: #334455;
     padding: 5px 10px;
     border-radius: 5px;
-    margin-top: 5px;
 }
 
-/* Ranking Geral */
+/* Ranking Geral (AJUSTADO PARA O NOVO ESTILO RETANGULAR) */
+#rankingList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 .rank-item {
   display: grid;
-  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-columns: 0.5fr 3fr 1fr; /* Posição | Nome | Pontos */
   align-items: center;
-  padding: 8px 15px;
+  padding: 5px 10px; /* Altura mais afinada */
   border-radius: 5px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   background-color: #334455;
 }
 
-/* Aumento do nome da equipe */
+/* NOVO: Estilo da caixa de nome no ranking */
 .rank-item span:nth-child(2) {
-    font-size: 1.4rem; 
+    font-size: 1.2rem; 
     font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    /* A cor de fundo será definida pelo JS */
 }

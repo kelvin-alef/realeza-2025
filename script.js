@@ -24,6 +24,7 @@ function createTeamInput(index) {
 
 document.getElementById("addTeam").addEventListener("click", () => {
   const count = document.querySelectorAll(".team-input").length;
+  // Use um índice baseado no tempo para garantir unicidade
   teamsContainer.appendChild(createTeamInput(Date.now())); 
 });
 
@@ -32,7 +33,6 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
   teams = [];
   const inputs = teamsContainer.querySelectorAll(".team-input");
   inputs.forEach((input, i) => {
-    // Busca os inputs dentro do elemento input da vez
     const name = input.querySelector('input[type="text"]').value || `Time ${i+1}`;
     const color = input.querySelector('input[type="color"]').value;
     teams.push({ name, color, points: 0, id: i });
@@ -50,33 +50,33 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
   renderRanking();
   updateTimerDisplay(); 
   
+  // Reseta o visual do botão do cronômetro
   startTimerBtn.textContent = '▶️';
-  startTimerBtn.style.backgroundColor = 'none'; // Reseta o estilo de fundo
+  startTimerBtn.style.color = '#ff9900';
   timeValueEl.style.color = '#fff';
 });
 
 // --- Tela principal ---
 const kingNameEl = document.getElementById("kingName");
-// REMOVIDO: kingPointsEl (não é mais necessário)
 const kingCardEl = document.getElementById("kingCard");
 const challengerListEl = document.getElementById("challengerList");
 const rankingListEl = document.getElementById("rankingList");
 
 function renderTeams() {
   const king = teams[kingIndex];
-  kingNameEl.textContent = king.name;
   
-  // REMOVIDO: Atualização de placar simplificado
-  
+  // NOVO: Aplica a cor de fundo e o texto do Rei
   kingCardEl.style.backgroundColor = king.color;
+  kingNameEl.textContent = king.name;
 
   challengerListEl.innerHTML = "";
   teams.forEach((team, i) => {
     if (i !== kingIndex) {
       const div = document.createElement("div");
       div.classList.add("challenger");
+      // Aplica a cor de fundo do desafiante
       div.style.backgroundColor = team.color;
-      // Nome do desafiante (destaque via CSS)
+      
       div.innerHTML = `<p>${team.name}</p>`;
       
       div.addEventListener("click", () => {
@@ -107,9 +107,11 @@ function renderRanking() {
   sorted.forEach((team, index) => {
     const div = document.createElement("div");
     div.classList.add("rank-item");
+    // O fundo do rank-item é o #334455, mas o nome do time tem seu próprio fundo
+    
     div.innerHTML = `
         <span>${index + 1}.</span>
-        <span style="color: ${team.color};">${team.name}</span>
+        <span style="background-color: ${team.color}; color: #000; text-shadow: none;">${team.name}</span>
         <span>${team.points}</span>
     `;
     rankingListEl.appendChild(div);
@@ -128,13 +130,14 @@ function formatTime(seconds) {
 
 function updateTimerDisplay() {
     timeValueEl.textContent = formatTime(timeLeft);
-    // As cores agora são tratadas no CSS para o display do tempo
+    const timeDisplayContainer = timeValueEl.parentNode;
+    
     if (timeLeft <= 10 && timeLeft > 0) {
-        timeValueEl.style.color = 'red';
+        timeDisplayContainer.style.color = 'red';
     } else if (timeLeft > 10) {
-        timeValueEl.style.color = '#00cc66';
+        timeDisplayContainer.style.color = '#00cc66';
     } else if (timeLeft <= 0) {
-        timeValueEl.style.color = 'red';
+        timeDisplayContainer.style.color = 'red';
     }
 }
 
@@ -143,7 +146,7 @@ function startTimer() {
         clearInterval(timerInterval);
         timerInterval = null;
         startTimerBtn.textContent = '▶️'; 
-        startTimerBtn.style.color = '#ff9900'; // Cor do Play
+        startTimerBtn.style.color = '#ff9900'; 
         return;
     }
 
@@ -152,7 +155,7 @@ function startTimer() {
     }
     
     startTimerBtn.textContent = '⏹️'; 
-    startTimerBtn.style.color = '#cc0000'; // Cor do Stop
+    startTimerBtn.style.color = '#cc0000'; 
 
     timerInterval = setInterval(() => {
         timeLeft--;
@@ -176,6 +179,7 @@ function nextRound() {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = null;
     
+    // Limpeza da tela de configuração
     teamsContainer.innerHTML = ''; 
     
     // Adiciona times iniciais padrão
