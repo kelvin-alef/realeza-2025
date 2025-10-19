@@ -237,7 +237,7 @@ downloadResultsBtn.addEventListener("click", downloadResultsAsImage);
 
 function resolveTie(roundIndex, winnerId) {
     const round = tournamentHistory[parseInt(roundIndex)];
-    round.manualWinnerId = parseInt(winnerId);
+    round.manualWinnerId = parseInt(winnerId); 
     
     renderTournamentHistory();
 }
@@ -295,7 +295,7 @@ function showResultsScreen() {
         })),
         isTie: isTie, 
         tiedTeamIds: tiedTeams.map(t => t.id), 
-        manualWinnerId: null 
+        manualWinnerId: null
     };
     
     tournamentHistory.push(roundResult);
@@ -312,7 +312,7 @@ function renderTournamentHistory() {
     
     const lastRound = tournamentHistory[tournamentHistory.length - 1];
 
-    if (lastRound && lastRound.isTie && !lastRound.manualWinnerId) {
+    if (lastRound && lastRound.isTie && lastRound.manualWinnerId === null) { 
         resultsTitleEl.innerHTML = `🏆 EMPATE! Escolha quem venceu.`;
     } else {
         resultsTitleEl.innerHTML = `🏆 Histórico da Rodada`;
@@ -325,9 +325,9 @@ function renderTournamentHistory() {
         const h2 = document.createElement("h2");
         let currentTitle = `ROUND ${round.roundNumber}: `;
         
-        if (round.isTie && !round.manualWinnerId && roundIndex === tournamentHistory.length - 1) {
+        if (round.isTie && round.manualWinnerId === null && roundIndex === tournamentHistory.length - 1) {
             currentTitle = `EM DESEMPATE...`;
-        } else if (round.manualWinnerId) {
+        } else if (round.manualWinnerId !== null) { 
             const winner = round.summary.find(s => s.id === round.manualWinnerId);
             currentTitle += `${winner ? winner.name.toUpperCase() : 'VENCEDOR MANUAL'} VENCEU! 🥇`;
         } else if (round.winnerName) {
@@ -354,7 +354,7 @@ function renderTournamentHistory() {
             const isLatestRound = roundIndex === tournamentHistory.length - 1;
 
             if (round.isTie && round.tiedTeamIds.includes(team.id)) {
-                if (!round.manualWinnerId && isLatestRound) {
+                if (round.manualWinnerId === null && isLatestRound) {
                     rowClasses += " tied-rank";
                     actionHtml = `<button class="tiebreaker-btn" data-round-index="${roundIndex}" data-winner-id="${team.id}">Vencedor</button>`;
                 } else if (round.manualWinnerId === team.id) {
@@ -386,7 +386,7 @@ function renderTournamentHistory() {
         tournamentHistoryDisplayEl.appendChild(roundDiv);
     });
 
-    if (lastRound && lastRound.isTie && !lastRound.manualWinnerId) {
+    if (lastRound && lastRound.isTie && lastRound.manualWinnerId === null) {
         startNewRoundBtn.disabled = true;
         startNewRoundBtn.textContent = 'Selecione o vencedor do empate acima para continuar';
     } else if (lastRound) {
