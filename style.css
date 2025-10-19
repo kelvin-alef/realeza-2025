@@ -343,7 +343,7 @@ button:hover {
   border-radius: 5px;
   font-size: 1rem;
   background-color: #334455;
-  cursor: pointer;
+  cursor: pointer; 
   transition: background-color 0.2s;
 }
 
@@ -378,19 +378,22 @@ button:hover {
 #resultsScreen {
     justify-content: flex-start;
     align-items: center;
-    padding: 20px;
+    padding: 20px 10px; 
     background-color: #0b141d;
     text-align: center;
     overflow-y: auto;
+    min-height: 100vh;
 }
 
 .results-container {
     background: #1a2a3a;
-    padding: 30px;
+    padding: 20px; 
     border-radius: 15px;
     max-width: 700px;
-    width: 95%;
+    width: 100%; 
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 #tournamentHistoryDisplay {
@@ -418,6 +421,7 @@ button:hover {
     font-weight: bold;
     color: #ffd700;
     margin: 10px 0;
+    text-transform: uppercase;
 }
 
 .results-table {
@@ -502,5 +506,11 @@ button:hover {
     
     #tournamentHistoryDisplay {
         max-height: 40vh;
+    }
+
+    .results-container {
+        padding: 15px; 
+        margin-left: 5px;
+        margin-right: 5px;
     }
 }

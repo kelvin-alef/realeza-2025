@@ -242,7 +242,7 @@ function showResultsScreen() {
     
     const roundResult = {
         roundNumber: tournamentHistory.length + 1,
-        winnerName: winner.name,
+        winnerName: winner.name.toUpperCase(),
         winnerId: winner.id,
         summary: sortedFinal.map(team => ({
             name: team.name,
