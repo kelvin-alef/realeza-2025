@@ -460,7 +460,7 @@ button:hover {
 
 .results-table .header, .results-table .row {
     display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 1.5fr;
+    grid-template-columns: 0.4fr 1.8fr 1fr 1.3fr 1fr;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 3px;
@@ -493,6 +493,35 @@ button:hover {
     color: #ff9900;
 }
 
+.tied-rank {
+    border: 3px solid #ff0000;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+    background-color: #4a3333 !important;
+}
+
+.final-winner-highlight {
+    border: 3px solid gold !important;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.9) !important;
+    background-color: #556677 !important;
+}
+
+.tiebreaker-btn {
+    background-color: #ff9900;
+    color: #000;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.75rem;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.tiebreaker-btn:hover {
+    background-color: #cc7a00;
+}
+
 .results-actions {
     display: flex;
     flex-direction: column;
@@ -523,9 +552,19 @@ button:hover {
     }
     
     .results-table .header, .results-table .row {
-        grid-template-columns: 0.5fr 2fr 1fr 1.5fr;
+        grid-template-columns: 0.5fr 2fr 1fr 1.2fr;
         font-size: 0.7rem;
         padding: 8px 5px;
+    }
+    
+    .results-table .header span:nth-child(4), 
+    .results-table .row span:nth-child(4) {
+        display: none;
+    }
+
+    .results-table .header span:nth-child(5), 
+    .results-table .row span:nth-child(5) {
+        display: block;
     }
     
     .round-summary-card h2 {
