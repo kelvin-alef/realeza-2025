@@ -375,6 +375,7 @@ button:hover {
     box-shadow: 0 0 8px gold;
 }
 
+/* --- TELA DE RESULTADOS --- */
 #resultsScreen {
     justify-content: flex-start;
     align-items: center;
@@ -394,10 +395,17 @@ button:hover {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     margin-top: 10px;
     margin-bottom: 20px;
+    
+    /* Adicionado para que o conteúdo possa rolar, mas o container fique flexível */
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 40px); /* Garante que o container cabe na tela */
 }
 
 #tournamentHistoryDisplay {
-    max-height: 60vh;
+    /* Diminuído o max-height para dar espaço aos botões, e usando flex-grow */
+    flex-grow: 1; 
+    max-height: 60vh; /* Ajustado para um valor que permite espaço para o título e botões */
     overflow-y: auto;
     padding: 10px;
     border: 1px solid #334455;
@@ -471,7 +479,9 @@ button:hover {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-top: 30px;
+    margin-top: 0; /* Removido margin-top para ser controlado pelo espaçamento do histórico */
+    flex-shrink: 0; /* Garante que esta seção não diminua quando o histórico crescer */
+    padding-top: 10px; /* Adiciona um pequeno espaçamento do histórico */
 }
 
 @media (max-width: 1000px) {
@@ -505,12 +515,14 @@ button:hover {
     }
     
     #tournamentHistoryDisplay {
-        max-height: 40vh;
+        max-height: 40vh; /* Ajuste para telas menores */
     }
 
+    /* Ajuste do container de resultados para garantir que caiba em telas menores */
     .results-container {
         padding: 15px; 
         margin-left: 5px;
         margin-right: 5px;
+        max-height: calc(100vh - 20px);
     }
 }
