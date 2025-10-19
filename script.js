@@ -105,7 +105,7 @@ function renderRanking() {
     
     div.innerHTML = `
         <span>${index + 1}.</span>
-        <span style="background-color: ${team.color}; color: #000; text-shadow: none;">${team.name}</span>
+        <span style="background-color: ${team.color};">${team.name}</span>
         <span>${team.points}</span>
     `;
     rankingListEl.appendChild(div);
