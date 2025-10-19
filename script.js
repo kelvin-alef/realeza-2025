@@ -6,6 +6,7 @@ let timeLeft;
 
 const setupScreen = document.getElementById("setupScreen");
 const gameScreen = document.getElementById("gameScreen");
+const resultsScreen = document.getElementById("resultsScreen"); // NOVA TELA
 const teamsContainer = document.getElementById("teamsContainer");
 const gameDurationInput = document.getElementById("gameDuration"); 
 
@@ -32,73 +33,89 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
   inputs.forEach((input, i) => {
     const name = input.querySelector('input[type="text"]').value || `Time ${i+1}`;
     const color = input.querySelector('input[type="color"]').value;
-    teams.push({ name, color, points: 0, id: i });
+    // NOVO: Adiciona timeAsKing a 0
+    teams.push({ name, color, points: 0, id: i, timeAsKing: 0 });
   });
+  if (teams.length < 2) { alert("Adicione pelo menos 2 times!"); return; }
 
-  totalGameDuration = parseInt(gameDurationInput.value) * 60;
-  kingIndex = 0;
+  totalGameDuration = parseInt(gameDurationInput.value) * 60; 
+  timeLeft = totalGameDuration;
   
-  if (teams.length < 2) {
-      alert("Adicione pelo menos 2 times para começar o jogo.");
-      return;
-  }
+  // Reseta todos os dados ao iniciar um novo jogo do zero
+  teams.forEach(team => {
+      team.points = 0;
+      team.timeAsKing = 0;
+  });
   
-  shuffleArray(teams);
-
+  kingIndex = Math.floor(Math.random() * teams.length);
+  
   setupScreen.classList.remove("active");
   gameScreen.classList.add("active");
+  renderTeams();
+  renderRanking();
+  updateTimerDisplay(); 
   
-  initGame();
+  startTimerBtn.textContent = '▶️';
+  startTimerBtn.style.color = '#ff9900';
+  timeValueEl.style.color = '#fff';
 });
-
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
 
 const kingNameEl = document.getElementById("kingName");
 const kingCardEl = document.getElementById("kingCard");
 const challengerListEl = document.getElementById("challengerList");
 const rankingListEl = document.getElementById("rankingList");
-const addPointsBtn = document.getElementById("addPoints");
 
-function updateCourt() {
-    if (teams.length === 0) return;
+function renderTeams() {
+  const king = teams[kingIndex];
+  
+  kingCardEl.style.backgroundColor = king.color;
+  kingNameEl.textContent = king.name;
 
-    const king = teams[kingIndex];
-    kingNameEl.textContent = king.name;
-    kingCardEl.style.backgroundColor = king.color;
+  challengerListEl.innerHTML = "";
+  teams.forEach((team, i) => {
+    if (i !== kingIndex) {
+      const div = document.createElement("div");
+      div.classList.add("challenger");
+      
+      div.style.backgroundColor = team.color;
+      
+      const p = document.createElement("p");
+      p.textContent = team.name;
+      div.appendChild(p);
+      
+      div.addEventListener("click", () => {
+        swapKing(i);
+      });
+      challengerListEl.appendChild(div);
+    }
+  });
+}
 
-    challengerListEl.innerHTML = "";
-    
-    teams.forEach((team, index) => {
-        if (index !== kingIndex) {
-            const challengerDiv = document.createElement("div");
-            challengerDiv.classList.add("challenger");
-            challengerDiv.style.backgroundColor = team.color;
-            challengerDiv.innerHTML = `<p>${team.name}</p>`;
-            challengerDiv.dataset.teamId = team.id;
-            
-            challengerDiv.addEventListener("click", () => swapKing(team.id));
+document.getElementById("addPoints").addEventListener("click", () => {
+  teams[kingIndex].points++;
+  renderTeams();
+  renderRanking();
+});
 
-            challengerListEl.appendChild(challengerDiv);
-        }
-    });
+function swapKing(newKingIndex) {
+    kingIndex = newKingIndex;
+    renderTeams();
+    renderRanking();
 }
 
 function renderRanking() {
-  const sorted = [...teams].sort((a,b) => b.points - a.points);
+  // Ordena por pontos, e em caso de empate, por tempo de realeza
+  const sorted = [...teams].sort((a,b) => {
+      if (b.points !== a.points) {
+          return b.points - a.points;
+      }
+      return b.timeAsKing - a.timeAsKing; 
+  });
   rankingListEl.innerHTML = "";
 
   sorted.forEach((team, index) => {
     const div = document.createElement("div");
     div.classList.add("rank-item");
-    
-    if (team.id === teams[kingIndex].id) {
-        div.classList.add("king-rank");
-    }
     
     div.innerHTML = `
         <span>${index + 1}.</span>
@@ -109,46 +126,25 @@ function renderRanking() {
   });
 }
 
-function initGame() {
-    timeLeft = totalGameDuration;
-    updateTimerDisplay();
-    updateCourt();
-    renderRanking();
-}
-
-function swapKing(challengerId) {
-    const challengerIndex = teams.findIndex(team => team.id === challengerId);
-    
-    if (challengerIndex !== -1) {
-        [teams[kingIndex], teams[challengerIndex]] = [teams[challengerIndex], teams[kingIndex]];
-        
-        kingIndex = teams.findIndex(team => team.id === teams[kingIndex].id);
-        
-        updateCourt();
-        renderRanking();
-    }
-}
-
-addPointsBtn.addEventListener("click", () => {
-    if (teams.length === 0) return;
-    teams[kingIndex].points++;
-    renderRanking();
-});
-
-const timeValueEl = document.getElementById("timeValue");
 const startTimerBtn = document.getElementById("startTimerBtn");
+const timeValueEl = document.getElementById("timeValue");
+
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
 
 function updateTimerDisplay() {
-    const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-    const seconds = (timeLeft % 60).toString().padStart(2, '0');
-    timeValueEl.textContent = `${minutes}:${seconds}`;
+    timeValueEl.textContent = formatTime(timeLeft);
+    const timeDisplayContainer = timeValueEl.parentNode;
     
-    if (timeLeft <= 30 && timeLeft > 0) {
-        timeValueEl.style.color = '#ff9900';
-    } else if (timeLeft === 0) {
-        timeValueEl.style.color = '#cc0000';
-    } else {
-        timeValueEl.style.color = '#fff';
+    if (timeLeft <= 10 && timeLeft > 0) {
+        timeDisplayContainer.style.color = 'red';
+    } else if (timeLeft > 10) {
+        timeDisplayContainer.style.color = '#00cc66';
+    } else if (timeLeft <= 0) {
+        timeDisplayContainer.style.color = 'red';
     }
 }
 
@@ -156,11 +152,11 @@ function startTimer() {
     if (timerInterval) {
         clearInterval(timerInterval);
         timerInterval = null;
-        startTimerBtn.textContent = '▶️';
-        startTimerBtn.style.color = '#ff9900';
+        startTimerBtn.textContent = '▶️'; 
+        startTimerBtn.style.color = '#ff9900'; 
         return;
     }
-    
+
     if (timeLeft <= 0) {
         timeLeft = totalGameDuration;
     }
@@ -170,6 +166,10 @@ function startTimer() {
 
     timerInterval = setInterval(() => {
         timeLeft--;
+        
+        // NOVO: Adiciona 1 segundo ao tempo de realeza da equipe atual
+        teams[kingIndex].timeAsKing++;
+        
         updateTimerDisplay();
         
         if (timeLeft <= 0) {
@@ -177,39 +177,118 @@ function startTimer() {
             timerInterval = null;
             startTimerBtn.textContent = '▶️';
             startTimerBtn.style.color = '#ff9900'; 
+            // Opcional: Chama a tela de resultados automaticamente
+            // showResultsScreen(); 
         }
     }, 1000);
 }
 
 startTimerBtn.addEventListener("click", startTimer);
 
-const nextRoundBtn = document.getElementById("nextRoundBtn");
+// LÓGICA DA TELA DE RESULTADOS
 
-function nextRound() {
+const showResultsBtn = document.getElementById("showResultsBtn");
+const roundWinnerEl = document.getElementById("roundWinner");
+const resultsTableContainerEl = document.getElementById("resultsTableContainer");
+const startNewRoundBtn = document.getElementById("startNewRoundBtn");
+const resetGameBtn = document.getElementById("resetGameBtn");
+
+showResultsBtn.addEventListener("click", showResultsScreen);
+
+function showResultsScreen() {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = null;
     
-    teams.forEach(team => team.points = 0); 
+    // 1. Encontra o vencedor da rodada
+    const sortedFinal = [...teams].sort((a,b) => {
+        if (b.points !== a.points) {
+            return b.points - a.points;
+        }
+        return b.timeAsKing - a.timeAsKing; 
+    });
     
-    const teamInputs = teamsContainer.querySelectorAll(".team-input");
+    const winner = sortedFinal[0];
     
-    if (teamInputs.length === 0) {
-        teamsContainer.appendChild(createTeamInput(1));
-        teamsContainer.appendChild(createTeamInput(2));
-        teamsContainer.appendChild(createTeamInput(3));
-    }
+    roundWinnerEl.innerHTML = `O vencedor desta rodada é **${winner.name}**! 🥇`;
+
+    // 2. Cria a tabela de resumo
+    let tableHtml = `
+        <div class="results-table">
+            <div class="header">
+                <span>POSIÇÃO</span>
+                <span>TIME</span>
+                <span>PONTOS</span>
+                <span>TEMPO DE REALEZA</span>
+            </div>
+    `;
+
+    sortedFinal.forEach((team, index) => {
+        tableHtml += `
+            <div class="row">
+                <span>${index + 1}.</span>
+                <span style="background-color: ${team.color};">${team.name}</span>
+                <span>${team.points}</span>
+                <span>${formatTime(team.timeAsKing)}</span>
+            </div>
+        `;
+    });
     
-    gameDurationInput.value = 15;
+    tableHtml += `</div>`;
+    resultsTableContainerEl.innerHTML = tableHtml;
     
+    // 3. Navega para a tela de resultados
     gameScreen.classList.remove("active");
-    setupScreen.classList.add("active");
+    resultsScreen.classList.add("active");
     
-    startTimerBtn.textContent = '▶️';
-    startTimerBtn.style.color = '#ff9900';
-    timeValueEl.style.color = '#fff';
+    // Define o ID do vencedor para o botão de iniciar nova rodada
+    startNewRoundBtn.dataset.winnerId = winner.id;
 }
 
-nextRoundBtn.addEventListener("click", nextRound);
+function startNewRound() {
+    const winnerId = parseInt(startNewRoundBtn.dataset.winnerId);
+    
+    // Remove a equipe vencedora do array de times
+    teams = teams.filter(team => team.id !== winnerId);
+    
+    if (teams.length < 2) {
+        alert("Fim do Torneio! Reinicie o jogo.");
+        resetGame();
+        return;
+    }
+    
+    // Reseta pontos e tempo para o próximo round
+    teams.forEach(team => {
+        team.points = 0;
+        team.timeAsKing = 0;
+    });
+
+    // Inicia um novo round com os times restantes
+    kingIndex = Math.floor(Math.random() * teams.length);
+    timeLeft = totalGameDuration;
+
+    resultsScreen.classList.remove("active");
+    gameScreen.classList.add("active");
+    renderTeams();
+    renderRanking();
+    updateTimerDisplay();
+}
+
+function resetGame() {
+    teams = [];
+    teamsContainer.innerHTML = ''; 
+    
+    // Recria os inputs vazios
+    teamsContainer.appendChild(createTeamInput(1));
+    teamsContainer.appendChild(createTeamInput(2));
+    teamsContainer.appendChild(createTeamInput(3));
+    gameDurationInput.value = 15;
+    
+    resultsScreen.classList.remove("active");
+    setupScreen.classList.add("active");
+}
+
+startNewRoundBtn.addEventListener("click", startNewRound);
+resetGameBtn.addEventListener("click", resetGame);
 
 document.addEventListener('DOMContentLoaded', () => {
     if (teamsContainer.children.length === 0) {

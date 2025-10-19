@@ -68,10 +68,25 @@
             <button id="startTimerBtn" class="action-btn timer-control-btn">▶️</button>
           </div>
           
-          <button id="nextRoundBtn" class="start-btn">Próxima Rodada</button>
+          <button id="showResultsBtn" class="start-btn action-btn-full">Mostrar Resultados</button>
         </div>
       </div>
     </main>
+  </div>
+  
+  <div id="resultsScreen" class="screen">
+    <div class="results-container">
+        <h1>🏆 Resultados Finais da Rodada</h1>
+        <p id="roundWinner"></p>
+        
+        <div id="resultsTableContainer">
+            </div>
+
+        <div class="results-actions">
+            <button id="startNewRoundBtn" class="start-btn">Iniciar Próxima Rodada (Remover Vencedor)</button>
+            <button id="resetGameBtn" class="action-btn">Voltar para Cadastro de Equipes</button>
+        </div>
+    </div>
   </div>
 
   <script src="script.js"></script>

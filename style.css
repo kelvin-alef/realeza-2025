@@ -32,12 +32,13 @@ header #title {
   justify-content: center;
 }
 
+/* Novo estilo para o título da tela de configuração */
 .setup-title {
     margin: 20px 0;
 }
 
 #titleImage {
-    height: 150px; 
+    height: 70px; 
     width: auto;
     object-fit: contain;
 }
@@ -47,7 +48,7 @@ header #title {
 }
 
 #setupScreen h1 {
-    font-size: 2rem;
+    font-size: 2rem; 
 }
 
 #teamForm {
@@ -282,9 +283,9 @@ button:hover {
     margin-top: auto; 
 }
 
-#nextRoundBtn {
-    margin: 15px auto 0 auto;
-    display: block; 
+#showResultsBtn {
+    margin-top: 5px; 
+    margin-bottom: 10px;
 }
 
 .timer-display-group {
@@ -358,9 +359,75 @@ button:hover {
     color: #ff9900;
 }
 
-.rank-item.king-rank span:nth-child(2) {
-    border: 3px solid gold;
-    box-shadow: 0 0 8px gold;
+/* ESTILOS DA TELA DE RESULTADOS */
+
+#resultsScreen {
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #0b141d;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.results-container {
+    background: #1a2a3a;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 700px;
+    width: 95%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+#roundWinner {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffd700;
+    margin: 20px 0;
+}
+
+.results-table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.results-table .header, .results-table .row {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 1fr 1.5fr;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+.results-table .header {
+    background-color: #0d1a26;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #00cc66;
+}
+
+.results-table .row {
+    background-color: #334455;
+    font-size: 0.9rem;
+}
+
+.results-table .row span:nth-child(2) {
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    color: white !important;
+}
+
+.results-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 30px;
 }
 
 @media (max-width: 1000px) {
@@ -445,6 +512,15 @@ button:hover {
     }
     
     .timer-control-btn {
+        font-size: 1.2rem;
+    }
+    
+    .results-table .header, .results-table .row {
+        grid-template-columns: 0.5fr 2fr 1fr 1.5fr;
+        font-size: 0.8rem;
+    }
+    
+    #roundWinner {
         font-size: 1.2rem;
     }
 }
