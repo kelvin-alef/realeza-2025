@@ -34,65 +34,58 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
     const color = input.querySelector('input[type="color"]').value;
     teams.push({ name, color, points: 0, id: i });
   });
-  if (teams.length < 2) { alert("Adicione pelo menos 2 times!"); return; }
 
-  totalGameDuration = parseInt(gameDurationInput.value) * 60; 
-  timeLeft = totalGameDuration;
+  totalGameDuration = parseInt(gameDurationInput.value) * 60;
+  kingIndex = 0;
   
-  kingIndex = Math.floor(Math.random() * teams.length);
+  if (teams.length < 2) {
+      alert("Adicione pelo menos 2 times para começar o jogo.");
+      return;
+  }
   
+  shuffleArray(teams);
+
   setupScreen.classList.remove("active");
   gameScreen.classList.add("active");
-  renderTeams();
-  renderRanking();
-  updateTimerDisplay(); 
   
-  startTimerBtn.textContent = '▶️';
-  startTimerBtn.style.color = '#ff9900';
-  timeValueEl.style.color = '#fff';
+  initGame();
 });
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 
 const kingNameEl = document.getElementById("kingName");
 const kingCardEl = document.getElementById("kingCard");
 const challengerListEl = document.getElementById("challengerList");
 const rankingListEl = document.getElementById("rankingList");
+const addPointsBtn = document.getElementById("addPoints");
 
-function renderTeams() {
-  const king = teams[kingIndex];
-  
-  kingCardEl.style.backgroundColor = king.color;
-  kingNameEl.textContent = king.name;
+function updateCourt() {
+    if (teams.length === 0) return;
 
-  challengerListEl.innerHTML = "";
-  teams.forEach((team, i) => {
-    if (i !== kingIndex) {
-      const div = document.createElement("div");
-      div.classList.add("challenger");
-      
-      div.style.backgroundColor = team.color;
-      
-      const p = document.createElement("p");
-      p.textContent = team.name;
-      div.appendChild(p);
-      
-      div.addEventListener("click", () => {
-        swapKing(i);
-      });
-      challengerListEl.appendChild(div);
-    }
-  });
-}
+    const king = teams[kingIndex];
+    kingNameEl.textContent = king.name;
+    kingCardEl.style.backgroundColor = king.color;
 
-document.getElementById("addPoints").addEventListener("click", () => {
-  teams[kingIndex].points++;
-  renderTeams();
-  renderRanking();
-});
+    challengerListEl.innerHTML = "";
+    
+    teams.forEach((team, index) => {
+        if (index !== kingIndex) {
+            const challengerDiv = document.createElement("div");
+            challengerDiv.classList.add("challenger");
+            challengerDiv.style.backgroundColor = team.color;
+            challengerDiv.innerHTML = `<p>${team.name}</p>`;
+            challengerDiv.dataset.teamId = team.id;
+            
+            challengerDiv.addEventListener("click", () => swapKing(team.id));
 
-function swapKing(newKingIndex) {
-    kingIndex = newKingIndex;
-    renderTeams();
-    renderRanking();
+            challengerListEl.appendChild(challengerDiv);
+        }
+    });
 }
 
 function renderRanking() {
@@ -103,6 +96,10 @@ function renderRanking() {
     const div = document.createElement("div");
     div.classList.add("rank-item");
     
+    if (team.id === teams[kingIndex].id) {
+        div.classList.add("king-rank");
+    }
+    
     div.innerHTML = `
         <span>${index + 1}.</span>
         <span style="background-color: ${team.color};">${team.name}</span>
@@ -112,25 +109,46 @@ function renderRanking() {
   });
 }
 
-const startTimerBtn = document.getElementById("startTimerBtn");
-const timeValueEl = document.getElementById("timeValue");
-
-function formatTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+function initGame() {
+    timeLeft = totalGameDuration;
+    updateTimerDisplay();
+    updateCourt();
+    renderRanking();
 }
 
-function updateTimerDisplay() {
-    timeValueEl.textContent = formatTime(timeLeft);
-    const timeDisplayContainer = timeValueEl.parentNode;
+function swapKing(challengerId) {
+    const challengerIndex = teams.findIndex(team => team.id === challengerId);
     
-    if (timeLeft <= 10 && timeLeft > 0) {
-        timeDisplayContainer.style.color = 'red';
-    } else if (timeLeft > 10) {
-        timeDisplayContainer.style.color = '#00cc66';
-    } else if (timeLeft <= 0) {
-        timeDisplayContainer.style.color = 'red';
+    if (challengerIndex !== -1) {
+        [teams[kingIndex], teams[challengerIndex]] = [teams[challengerIndex], teams[kingIndex]];
+        
+        kingIndex = teams.findIndex(team => team.id === teams[kingIndex].id);
+        
+        updateCourt();
+        renderRanking();
+    }
+}
+
+addPointsBtn.addEventListener("click", () => {
+    if (teams.length === 0) return;
+    teams[kingIndex].points++;
+    renderRanking();
+});
+
+const timeValueEl = document.getElementById("timeValue");
+const startTimerBtn = document.getElementById("startTimerBtn");
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const seconds = (timeLeft % 60).toString().padStart(2, '0');
+    timeValueEl.textContent = `${minutes}:${seconds}`;
+    
+    if (timeLeft <= 30 && timeLeft > 0) {
+        timeValueEl.style.color = '#ff9900';
+    } else if (timeLeft === 0) {
+        timeValueEl.style.color = '#cc0000';
+    } else {
+        timeValueEl.style.color = '#fff';
     }
 }
 
@@ -138,11 +156,11 @@ function startTimer() {
     if (timerInterval) {
         clearInterval(timerInterval);
         timerInterval = null;
-        startTimerBtn.textContent = '▶️'; 
-        startTimerBtn.style.color = '#ff9900'; 
+        startTimerBtn.textContent = '▶️';
+        startTimerBtn.style.color = '#ff9900';
         return;
     }
-
+    
     if (timeLeft <= 0) {
         timeLeft = totalGameDuration;
     }
@@ -171,11 +189,16 @@ function nextRound() {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = null;
     
-    teamsContainer.innerHTML = ''; 
+    teams.forEach(team => team.points = 0); 
     
-    teamsContainer.appendChild(createTeamInput(1));
-    teamsContainer.appendChild(createTeamInput(2));
-    teamsContainer.appendChild(createTeamInput(3));
+    const teamInputs = teamsContainer.querySelectorAll(".team-input");
+    
+    if (teamInputs.length === 0) {
+        teamsContainer.appendChild(createTeamInput(1));
+        teamsContainer.appendChild(createTeamInput(2));
+        teamsContainer.appendChild(createTeamInput(3));
+    }
+    
     gameDurationInput.value = 15;
     
     gameScreen.classList.remove("active");
@@ -195,7 +218,3 @@ document.addEventListener('DOMContentLoaded', () => {
         teamsContainer.appendChild(createTeamInput(3));
     }
 });
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
-}

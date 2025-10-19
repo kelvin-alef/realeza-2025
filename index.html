@@ -31,9 +31,12 @@
 
     <main class="main-container">
       <div id="court">
+        <div id="courtTitles">
+            <span id="kingSideLabel" class="side-label top-left-label">LADO REALEZA 👑</span>
+            <span id="challengerSideLabel" class="side-label top-right-label">LADO DESAFIANTE ⚔️</span>
+        </div>
+
         <div id="courtDisplay">
-          
-          <span id="kingSideLabel" class="side-label left-label">LADO REALEZA 👑</span>
           
           <div id="kingSide">
             <div id="kingCard" class="team-card king">
@@ -44,8 +47,6 @@
           <div id="challengerSide">
             <div id="challengerList" class="challenger-list"></div>
           </div>
-
-          <span id="challengerSideLabel" class="side-label right-label">LADO DESAFIANTE ⚔️</span>
           
         </div>
         
@@ -58,6 +59,7 @@
         
         <div id="infoBoard">
           <button id="addPoints" class="action-btn action-btn-full">+1 Ponto à Realeza</button>
+          
           <div class="timer-display-group">
             <p id="timer">TEMPO RESTANTE: <span id="timeValue">00:00</span></p>
             <button id="startTimerBtn" class="action-btn timer-control-btn">▶️</button>
