@@ -7,7 +7,7 @@
   "theme_color": "#222",
   "icons": [
     {
-      "src": "https://upload.wikimedia.org/wikipedia/commons/6/61/Mikasa_Volleyball.jpg",
+      "src": "bola.png",
       "sizes": "192x192",
       "type": "image/png"
     }

@@ -1,10 +1,9 @@
 let teams = [];
 let kingIndex = 0;
-let totalGameDuration = 0; 
+let totalGameDuration = 0;
 let timerInterval = null;
 let timeLeft;
 
-// --- Tela de configuração ---
 const setupScreen = document.getElementById("setupScreen");
 const gameScreen = document.getElementById("gameScreen");
 const teamsContainer = document.getElementById("teamsContainer");
@@ -23,7 +22,6 @@ function createTeamInput(index) {
 }
 
 document.getElementById("addTeam").addEventListener("click", () => {
-  const count = document.querySelectorAll(".team-input").length;
   teamsContainer.appendChild(createTeamInput(Date.now())); 
 });
 
@@ -54,7 +52,6 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
   timeValueEl.style.color = '#fff';
 });
 
-// --- Tela principal ---
 const kingNameEl = document.getElementById("kingName");
 const kingCardEl = document.getElementById("kingCard");
 const challengerListEl = document.getElementById("challengerList");
@@ -63,9 +60,7 @@ const rankingListEl = document.getElementById("rankingList");
 function renderTeams() {
   const king = teams[kingIndex];
   
-  // MODIFICADO: Aplica a cor de fundo do time do Rei
   kingCardEl.style.backgroundColor = king.color;
-  kingCardEl.style.color = '#000'; // Define a cor do texto para contrastar com o fundo
   kingNameEl.textContent = king.name;
 
   challengerListEl.innerHTML = "";
@@ -74,11 +69,11 @@ function renderTeams() {
       const div = document.createElement("div");
       div.classList.add("challenger");
       
-      // Aplica a cor de fundo do desafiante
       div.style.backgroundColor = team.color;
-      div.style.color = '#000'; // Define a cor do texto para contrastar com o fundo
       
-      div.innerHTML = `<p>${team.name}</p>`;
+      const p = document.createElement("p");
+      p.textContent = team.name;
+      div.appendChild(p);
       
       div.addEventListener("click", () => {
         swapKing(i);
@@ -100,7 +95,6 @@ function swapKing(newKingIndex) {
     renderRanking();
 }
 
-// --- Ranking geral ---
 function renderRanking() {
   const sorted = [...teams].sort((a,b) => b.points - a.points);
   rankingListEl.innerHTML = "";
@@ -109,8 +103,6 @@ function renderRanking() {
     const div = document.createElement("div");
     div.classList.add("rank-item");
     
-    // O span:nth-child(2) é o nome do time
-    // O span:nth-child(3) são os pontos
     div.innerHTML = `
         <span>${index + 1}.</span>
         <span style="background-color: ${team.color}; color: #000; text-shadow: none;">${team.name}</span>
@@ -120,7 +112,6 @@ function renderRanking() {
   });
 }
 
-// --- Lógica do Cronômetro ---
 const startTimerBtn = document.getElementById("startTimerBtn");
 const timeValueEl = document.getElementById("timeValue");
 
@@ -174,7 +165,6 @@ function startTimer() {
 
 startTimerBtn.addEventListener("click", startTimer);
 
-// --- Lógica Próxima Rodada ---
 const nextRoundBtn = document.getElementById("nextRoundBtn");
 
 function nextRound() {
@@ -198,7 +188,6 @@ function nextRound() {
 
 nextRoundBtn.addEventListener("click", nextRound);
 
-
 document.addEventListener('DOMContentLoaded', () => {
     if (teamsContainer.children.length === 0) {
         teamsContainer.appendChild(createTeamInput(1));
@@ -207,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// --- PWA ---
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
