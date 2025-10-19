@@ -236,7 +236,7 @@ showResultsBtn.addEventListener("click", showResultsScreen);
 downloadResultsBtn.addEventListener("click", downloadResultsAsImage);
 
 window.resolveTie = function(roundIndex, winnerId) {
-    const round = tournamentHistory[roundIndex];
+    const round = tournamentHistory[parseInt(roundIndex)];
     round.manualWinnerId = parseInt(winnerId);
     
     renderTournamentHistory();
@@ -356,7 +356,7 @@ function renderTournamentHistory() {
             if (round.isTie && round.tiedTeamIds.includes(team.id)) {
                 if (!round.manualWinnerId && isLatestRound) {
                     rowClasses += " tied-rank";
-                    actionHtml = `<button class="tiebreaker-btn" onclick="resolveTie(${roundIndex}, '${team.id}')">Vencedor</button>`;
+                    actionHtml = `<button class="tiebreaker-btn" onclick="resolveTie('${roundIndex}', '${team.id}')">Vencedor</button>`;
                 } else if (round.manualWinnerId === team.id) {
                     rowClasses += " final-winner-highlight";
                 }
