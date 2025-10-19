@@ -10,6 +10,19 @@ const gameScreen = document.getElementById("gameScreen");
 const resultsScreen = document.getElementById("resultsScreen"); 
 const teamsContainer = document.getElementById("teamsContainer");
 const gameDurationInput = document.getElementById("gameDuration"); 
+const startTimerBtn = document.getElementById("startTimerBtn");
+const addPointsBtn = document.getElementById("addPoints");
+const timeValueEl = document.getElementById("timeValue");
+const kingNameEl = document.getElementById("kingName");
+const kingCardEl = document.getElementById("kingCard");
+const challengerListEl = document.getElementById("challengerList");
+const rankingListEl = document.getElementById("rankingList");
+const showResultsBtn = document.getElementById("showResultsBtn");
+const tournamentHistoryDisplayEl = document.getElementById("tournamentHistoryDisplay");
+const startNewRoundBtn = document.getElementById("startNewRoundBtn");
+const resetGameBtn = document.getElementById("resetGameBtn");
+const downloadResultsBtn = document.getElementById("downloadResultsBtn");
+const resultsContainerEl = document.getElementById("resultsContainer");
 
 function createTeamInput(index) {
   const div = document.createElement("div");
@@ -67,16 +80,12 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
   updateTimerDisplay(); 
   
   document.getElementById("showResultsBtn").disabled = false;
+  addPointsBtn.disabled = true;
   
   startTimerBtn.textContent = '▶️';
   startTimerBtn.style.color = '#ff9900';
   timeValueEl.style.color = '#fff';
 });
-
-const kingNameEl = document.getElementById("kingName");
-const kingCardEl = document.getElementById("kingCard");
-const challengerListEl = document.getElementById("challengerList");
-const rankingListEl = document.getElementById("rankingList");
 
 function renderTeams() {
   const king = teams[kingIndex];
@@ -104,7 +113,11 @@ function renderTeams() {
   });
 }
 
-document.getElementById("addPoints").addEventListener("click", () => {
+addPointsBtn.addEventListener("click", () => {
+  if (!timerInterval) {
+    alert("Inicie o cronômetro antes de adicionar pontos.");
+    return;
+  }
   teams[kingIndex].points++;
   renderTeams();
   renderRanking();
@@ -133,17 +146,25 @@ function renderRanking() {
         div.classList.add("king-rank");
     }
     
+    div.dataset.teamId = team.id; 
+    
     div.innerHTML = `
         <span>${index + 1}.</span>
         <span style="background-color: ${team.color};">${team.name}</span>
         <span>${team.points}</span>
     `;
+    
+    div.addEventListener('click', (e) => {
+        const clickedTeamId = parseInt(e.currentTarget.dataset.teamId);
+        const newKingIndex = teams.findIndex(t => t.id === clickedTeamId);
+        if (newKingIndex !== -1) {
+            swapKing(newKingIndex);
+        }
+    });
+
     rankingListEl.appendChild(div);
   });
 }
-
-const startTimerBtn = document.getElementById("startTimerBtn");
-const timeValueEl = document.getElementById("timeValue");
 
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
@@ -171,6 +192,7 @@ function startTimer() {
         timerInterval = null;
         startTimerBtn.textContent = '▶️'; 
         startTimerBtn.style.color = '#ff9900'; 
+        addPointsBtn.disabled = true;
         return;
     }
     
@@ -182,6 +204,7 @@ function startTimer() {
     
     startTimerBtn.textContent = '⏹️'; 
     startTimerBtn.style.color = '#cc0000'; 
+    addPointsBtn.disabled = false;
 
     timerInterval = setInterval(() => {
         timeLeft--;
@@ -195,19 +218,12 @@ function startTimer() {
             timerInterval = null;
             startTimerBtn.textContent = '▶️';
             startTimerBtn.style.color = '#ff9900'; 
+            addPointsBtn.disabled = true;
         }
     }, 1000);
 }
 
 startTimerBtn.addEventListener("click", startTimer);
-
-const showResultsBtn = document.getElementById("showResultsBtn");
-const tournamentHistoryDisplayEl = document.getElementById("tournamentHistoryDisplay");
-const startNewRoundBtn = document.getElementById("startNewRoundBtn");
-const resetGameBtn = document.getElementById("resetGameBtn");
-const downloadResultsBtn = document.getElementById("downloadResultsBtn");
-const resultsContainerEl = document.getElementById("resultsContainer");
-
 showResultsBtn.addEventListener("click", showResultsScreen);
 downloadResultsBtn.addEventListener("click", downloadResultsAsImage);
 
