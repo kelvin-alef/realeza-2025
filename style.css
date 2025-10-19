@@ -364,6 +364,11 @@ button:hover {
 }
 
 
+.rank-item.king-rank span:nth-child(2) {
+    border: 3px solid gold;
+    box-shadow: 0 0 8px gold;
+}
+
 /* ESTILOS DA TELA DE RESULTADOS */
 
 #resultsScreen {
