@@ -230,8 +230,6 @@ button:hover {
 }
 
 #kingCard {
-  border: 3px solid gold;
-  box-shadow: 0 0 10px gold;
   font-weight: 700;
   color: white; 
   text-shadow: 1px 1px 2px #000;
@@ -286,6 +284,12 @@ button:hover {
 #showResultsBtn {
     margin-top: 5px; 
     margin-bottom: 10px;
+}
+
+#showResultsBtn:disabled {
+    background: #555;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
 .timer-display-group {
@@ -359,15 +363,16 @@ button:hover {
     color: #ff9900;
 }
 
+
 /* ESTILOS DA TELA DE RESULTADOS */
 
 #resultsScreen {
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     padding: 20px;
     background-color: #0b141d;
     text-align: center;
-    overflow-y: auto;
+    overflow-y: auto; /* Permite rolagem */
 }
 
 .results-container {
@@ -379,18 +384,39 @@ button:hover {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-#roundWinner {
-    font-size: 1.5rem;
+#tournamentHistoryDisplay {
+    max-height: 60vh; /* Limita a altura do histórico */
+    overflow-y: auto; /* Adiciona barra de rolagem ao histórico */
+    padding: 10px;
+    border: 1px solid #334455;
+    border-radius: 8px;
+    background: #0d1a26;
+    margin-bottom: 20px;
+}
+
+.round-summary-card {
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 3px solid #334455; /* Separador entre rodadas */
+}
+
+.round-summary-card:last-child {
+    border-bottom: none;
+}
+
+.round-summary-card h2 {
+    font-size: 1.4rem;
     font-weight: bold;
     color: #ffd700;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 .results-table {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 10px;
+    font-size: 0.9rem;
 }
 
 .results-table .header, .results-table .row {
@@ -398,29 +424,34 @@ button:hover {
     grid-template-columns: 0.5fr 2fr 1fr 1.5fr;
     padding: 10px;
     border-radius: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     align-items: center;
     text-transform: uppercase;
+    text-align: center;
 }
 
 .results-table .header {
     background-color: #0d1a26;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #00cc66;
 }
 
 .results-table .row {
     background-color: #334455;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .results-table .row span:nth-child(2) {
     font-weight: 700;
     padding: 5px 10px;
     border-radius: 5px;
-    text-align: center;
     color: white !important;
+}
+
+.results-table .row span:nth-child(4) {
+    font-weight: bold;
+    color: #ff9900;
 }
 
 .results-actions {
@@ -442,85 +473,25 @@ button:hover {
     }
     
     #court {
-        flex: auto;
-        padding: 10px 0;
         min-height: auto;
-    }
-
-    #courtTitles {
-        width: 95%;
-        max-width: 700px;
     }
     
     #courtDisplay {
-        width: 95%;
         height: 50vh; 
         max-height: 400px;
-        max-width: 700px;
-    }
-
-    .side-label {
-        font-size: 1rem;
-        padding: 6px 10px;
-    }
-    
-    #kingCard {
-        font-size: 1.8rem;
-        padding: 8px 10px;
-        min-width: 120px;
-        max-width: 200px; 
-    }
-
-    .challenger-list {
-      flex-direction: row; 
-      width: 80%; 
-      flex-wrap: wrap; 
-      justify-content: center;
-      max-width: 700px;
-    }
-    
-    .challenger {
-        min-width: 80px;
-        max-width: none;
-    }
-    
-    .challenger p {
-        font-size: 1rem;
-    }
-    
-    #scoreBoard {
-        flex: auto;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-        overflow-y: auto; 
-        max-height: 50vh; 
-    }
-    
-    .rank-item {
-        font-size: 0.9rem;
-    }
-
-    .rank-item span:nth-child(2), .rank-item span:nth-child(3) {
-        font-size: 1.1rem;
-    }
-    
-    #timer {
-        font-size: 1rem;
-    }
-    
-    #timer span {
-        font-size: 1.3rem;
-    }
-    
-    .timer-control-btn {
-        font-size: 1.2rem;
     }
     
     .results-table .header, .results-table .row {
         grid-template-columns: 0.5fr 2fr 1fr 1.5fr;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
+        padding: 8px 5px;
     }
     
-    #roundWinner {
-        font-size: 1.2rem;
+    .round-summary-card h2 {
+        font-size: 1.1rem;
+    }
+    
+    #tournamentHistoryDisplay {
+        max-height: 40vh;
     }
 }

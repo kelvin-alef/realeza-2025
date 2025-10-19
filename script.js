@@ -3,10 +3,11 @@ let kingIndex = 0;
 let totalGameDuration = 0;
 let timerInterval = null;
 let timeLeft;
+let tournamentHistory = [];
 
 const setupScreen = document.getElementById("setupScreen");
 const gameScreen = document.getElementById("gameScreen");
-const resultsScreen = document.getElementById("resultsScreen"); // NOVA TELA
+const resultsScreen = document.getElementById("resultsScreen"); 
 const teamsContainer = document.getElementById("teamsContainer");
 const gameDurationInput = document.getElementById("gameDuration"); 
 
@@ -28,24 +29,38 @@ document.getElementById("addTeam").addEventListener("click", () => {
 
 document.getElementById("teamForm").addEventListener("submit", (e) => {
   e.preventDefault();
-  teams = [];
+  
+  // Se for o início de um novo torneio (não apenas um reset de rodada), limpa o histórico
+  if (teams.length === 0 || confirm("Deseja iniciar um NOVO TORNEIO? Isso apagará o histórico de rodadas.")) {
+      teams = [];
+      tournamentHistory = []; 
+  }
+
   const inputs = teamsContainer.querySelectorAll(".team-input");
   inputs.forEach((input, i) => {
     const name = input.querySelector('input[type="text"]').value || `Time ${i+1}`;
     const color = input.querySelector('input[type="color"]').value;
-    // NOVO: Adiciona timeAsKing a 0
-    teams.push({ name, color, points: 0, id: i, timeAsKing: 0 });
+    
+    // Verifica se o time já existe, caso contrário, adiciona
+    let existingTeam = teams.find(t => t.id === i);
+    if (!existingTeam) {
+        teams.push({ name, color, points: 0, id: i, timeAsKing: 0 });
+    } else {
+        existingTeam.name = name;
+        existingTeam.color = color;
+        // Reseta as estatísticas da rodada, mas mantém o time no array
+        existingTeam.points = 0;
+        existingTeam.timeAsKing = 0;
+    }
   });
+  
+  // Corrige IDs se houver times removidos
+  teams.forEach((team, i) => team.id = i); 
+  
   if (teams.length < 2) { alert("Adicione pelo menos 2 times!"); return; }
 
   totalGameDuration = parseInt(gameDurationInput.value) * 60; 
   timeLeft = totalGameDuration;
-  
-  // Reseta todos os dados ao iniciar um novo jogo do zero
-  teams.forEach(team => {
-      team.points = 0;
-      team.timeAsKing = 0;
-  });
   
   kingIndex = Math.floor(Math.random() * teams.length);
   
@@ -54,6 +69,8 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
   renderTeams();
   renderRanking();
   updateTimerDisplay(); 
+  
+  document.getElementById("showResultsBtn").disabled = false;
   
   startTimerBtn.textContent = '▶️';
   startTimerBtn.style.color = '#ff9900';
@@ -104,7 +121,6 @@ function swapKing(newKingIndex) {
 }
 
 function renderRanking() {
-  // Ordena por pontos, e em caso de empate, por tempo de realeza
   const sorted = [...teams].sort((a,b) => {
       if (b.points !== a.points) {
           return b.points - a.points;
@@ -145,6 +161,7 @@ function updateTimerDisplay() {
         timeDisplayContainer.style.color = '#00cc66';
     } else if (timeLeft <= 0) {
         timeDisplayContainer.style.color = 'red';
+        document.getElementById("showResultsBtn").disabled = false; // Habilita o botão ao zerar
     }
 }
 
@@ -156,6 +173,8 @@ function startTimer() {
         startTimerBtn.style.color = '#ff9900'; 
         return;
     }
+    
+    document.getElementById("showResultsBtn").disabled = true;
 
     if (timeLeft <= 0) {
         timeLeft = totalGameDuration;
@@ -167,7 +186,6 @@ function startTimer() {
     timerInterval = setInterval(() => {
         timeLeft--;
         
-        // NOVO: Adiciona 1 segundo ao tempo de realeza da equipe atual
         teams[kingIndex].timeAsKing++;
         
         updateTimerDisplay();
@@ -177,8 +195,6 @@ function startTimer() {
             timerInterval = null;
             startTimerBtn.textContent = '▶️';
             startTimerBtn.style.color = '#ff9900'; 
-            // Opcional: Chama a tela de resultados automaticamente
-            // showResultsScreen(); 
         }
     }, 1000);
 }
@@ -188,18 +204,20 @@ startTimerBtn.addEventListener("click", startTimer);
 // LÓGICA DA TELA DE RESULTADOS
 
 const showResultsBtn = document.getElementById("showResultsBtn");
-const roundWinnerEl = document.getElementById("roundWinner");
-const resultsTableContainerEl = document.getElementById("resultsTableContainer");
+const tournamentHistoryDisplayEl = document.getElementById("tournamentHistoryDisplay"); // NOVO ELEMENTO
 const startNewRoundBtn = document.getElementById("startNewRoundBtn");
 const resetGameBtn = document.getElementById("resetGameBtn");
+const downloadResultsBtn = document.getElementById("downloadResultsBtn");
+const resultsContainerEl = document.getElementById("resultsContainer"); // Para download
 
 showResultsBtn.addEventListener("click", showResultsScreen);
+downloadResultsBtn.addEventListener("click", downloadResultsAsImage);
 
 function showResultsScreen() {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = null;
     
-    // 1. Encontra o vencedor da rodada
+    // 1. Encontra o vencedor da rodada atual
     const sortedFinal = [...teams].sort((a,b) => {
         if (b.points !== a.points) {
             return b.points - a.points;
@@ -209,51 +227,123 @@ function showResultsScreen() {
     
     const winner = sortedFinal[0];
     
-    roundWinnerEl.innerHTML = `O vencedor desta rodada é **${winner.name}**! 🥇`;
-
-    // 2. Cria a tabela de resumo
-    let tableHtml = `
-        <div class="results-table">
-            <div class="header">
-                <span>POSIÇÃO</span>
-                <span>TIME</span>
-                <span>PONTOS</span>
-                <span>TEMPO DE REALEZA</span>
-            </div>
-    `;
-
-    sortedFinal.forEach((team, index) => {
-        tableHtml += `
-            <div class="row">
-                <span>${index + 1}.</span>
-                <span style="background-color: ${team.color};">${team.name}</span>
-                <span>${team.points}</span>
-                <span>${formatTime(team.timeAsKing)}</span>
-            </div>
-        `;
-    });
+    // 2. Salva o resultado da rodada no histórico
+    const roundResult = {
+        roundNumber: tournamentHistory.length + 1,
+        winnerName: winner.name,
+        winnerId: winner.id,
+        summary: sortedFinal.map(team => ({
+            name: team.name,
+            color: team.color,
+            points: team.points,
+            time: team.timeAsKing,
+        }))
+    };
     
-    tableHtml += `</div>`;
-    resultsTableContainerEl.innerHTML = tableHtml;
+    tournamentHistory.push(roundResult);
+
+    // 3. Renderiza o histórico completo
+    renderTournamentHistory();
     
-    // 3. Navega para a tela de resultados
+    // 4. Navega para a tela de resultados
     gameScreen.classList.remove("active");
     resultsScreen.classList.add("active");
     
     // Define o ID do vencedor para o botão de iniciar nova rodada
     startNewRoundBtn.dataset.winnerId = winner.id;
+    
+    // Apenas habilita a próxima rodada se houver mais de um time restante
+    startNewRoundBtn.disabled = teams.length <= 2;
+    if (teams.length <= 2) {
+        startNewRoundBtn.textContent = "Última Rodada Finalizada!";
+    }
 }
+
+function renderTournamentHistory() {
+    tournamentHistoryDisplayEl.innerHTML = '';
+    
+    tournamentHistory.forEach(round => {
+        const roundDiv = document.createElement("div");
+        roundDiv.classList.add("round-summary-card");
+        
+        // Título da rodada
+        const titleHtml = `
+            <h2>RODADA ${round.roundNumber}: ${round.winnerName} VENCEU! 🥇</h2>
+        `;
+        
+        // Tabela de resumo
+        let tableHtml = `
+            <div class="results-table">
+                <div class="header">
+                    <span>POSIÇÃO</span>
+                    <span>TIME</span>
+                    <span>PONTOS</span>
+                    <span>TEMPO REALEZA</span>
+                </div>
+        `;
+
+        round.summary.forEach((team, index) => {
+            tableHtml += `
+                <div class="row">
+                    <span>${index + 1}.</span>
+                    <span style="background-color: ${team.color};">${team.name}</span>
+                    <span>${team.points}</span>
+                    <span>${formatTime(team.time)}</span>
+                </div>
+            `;
+        });
+        
+        tableHtml += `</div><hr class="summary-separator">`;
+        
+        roundDiv.innerHTML = titleHtml + tableHtml;
+        tournamentHistoryDisplayEl.appendChild(roundDiv);
+    });
+}
+
+function downloadResultsAsImage() {
+    // Esconde os botões de ação e define o fundo claro para melhor JPG
+    const actions = document.querySelector('.results-actions');
+    actions.style.display = 'none';
+    resultsContainerEl.style.backgroundColor = '#1a2a3a'; 
+    
+    html2canvas(resultsContainerEl, {
+        scale: 2, // Maior escala para melhor qualidade
+        useCORS: true,
+        backgroundColor: '#1a2a3a' // Define o fundo para a imagem
+    }).then(canvas => {
+        // Gera a imagem JPG
+        const imgData = canvas.toDataURL('image/jpeg', 0.9);
+        
+        // Cria um link de download
+        const link = document.createElement('a');
+        link.href = imgData;
+        link.download = `Torneio_Realeza_Rodada_${tournamentHistory.length}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Volta a exibir os botões e restaura o fundo
+        actions.style.display = 'flex';
+        resultsContainerEl.style.backgroundColor = '';
+        
+        alert("Imagem dos resultados baixada com sucesso!");
+    });
+}
+
 
 function startNewRound() {
     const winnerId = parseInt(startNewRoundBtn.dataset.winnerId);
+    
+    // Encontra o time vencedor antes de filtrá-lo
+    const winnerName = teams.find(t => t.id === winnerId)?.name || "Vencedor";
     
     // Remove a equipe vencedora do array de times
     teams = teams.filter(team => team.id !== winnerId);
     
     if (teams.length < 2) {
-        alert("Fim do Torneio! Reinicie o jogo.");
-        resetGame();
-        return;
+        alert(`O time ${winnerName} foi removido. A próxima será a rodada final!`);
+        startNewRoundBtn.disabled = true;
+        startNewRoundBtn.textContent = "Última Rodada Finalizada!";
     }
     
     // Reseta pontos e tempo para o próximo round
@@ -275,6 +365,7 @@ function startNewRound() {
 
 function resetGame() {
     teams = [];
+    tournamentHistory = []; // Zera todo o histórico do torneio
     teamsContainer.innerHTML = ''; 
     
     // Recria os inputs vazios

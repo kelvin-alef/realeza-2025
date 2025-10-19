@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Torneio da Realeza</title>
+  <title>Realeza 2025</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="bola.png" type="image/png">
@@ -75,20 +75,20 @@
   </div>
   
   <div id="resultsScreen" class="screen">
-    <div class="results-container">
-        <h1>🏆 Resultados Finais da Rodada</h1>
-        <p id="roundWinner"></p>
+    <div class="results-container" id="resultsContainer">
+        <h1>🏆 Histórico da Rodada</h1>
         
-        <div id="resultsTableContainer">
-            </div>
+        <div id="tournamentHistoryDisplay"></div>
 
         <div class="results-actions">
-            <button id="startNewRoundBtn" class="start-btn">Iniciar Próxima Rodada (Remover Vencedor)</button>
+            <button id="downloadResultsBtn" class="action-btn action-btn-full">⬇️ Baixar como Imagem (JPG)</button>
+            <button id="startNewRoundBtn" class="start-btn">Iniciar Próximo Round (Remover Vencedor)</button>
             <button id="resetGameBtn" class="action-btn">Voltar para Cadastro de Equipes</button>
         </div>
     </div>
   </div>
 
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
