@@ -141,21 +141,22 @@ button:hover {
 
 #courtDisplay {
   background-image: url('background.jpg');
-  background-size: contain;
+  background-size: cover; 
   background-repeat: no-repeat;
   background-position: center center;
   width: 90%;
   flex-grow: 1; 
-  max-height: 800px; 
+  max-height: 400px; 
+  max-width: 700px;
   position: relative;
   border-radius: 10px;
   box-shadow: 0 0 30px rgba(255, 165, 0, 0.5), inset 0 0 50px rgba(255, 165, 0, 0.3); 
   border: 4px solid #ff9900;
   display: flex;
-  flex-direction: column;
+  flex-direction: row; 
   align-items: center;
   justify-content: space-between;
-  padding: 10px 0;
+  padding: 0;
   margin-top: 10px; 
 }
 
@@ -167,35 +168,35 @@ button:hover {
     font-size: 1.2rem; 
     color: #ffd700;
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 10;
 }
 
-.top-label {
-    top: 5px; 
+.left-label {
+    left: 5px; 
 }
 
-.bottom-label {
-    bottom: 5px; 
+.right-label {
+    right: 5px; 
 }
 
 #kingSide {
-    width: 100%;
+    height: 100%;
     flex: 1 1 50%; 
     display: flex;
     justify-content: center;
-    align-items: flex-start; 
-    padding-top: 50px; 
+    align-items: center; 
+    padding: 0; 
 }
 
 #challengerSide {
-    width: 100%;
+    height: 100%;
     flex: 1 1 50%; 
     display: flex;
     justify-content: center;
-    align-items: flex-end; 
-    padding-bottom: 50px; 
+    align-items: center; 
+    padding: 0; 
 }
 
 .team-card, .challenger {
@@ -227,8 +228,8 @@ button:hover {
 #kingCard p { margin: 0; }
 
 .challenger-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr; 
+  display: flex;
+  flex-direction: column; 
   gap: 10px;
   padding: 5px;
   width: 50%; 
@@ -367,8 +368,9 @@ button:hover {
     
     #courtDisplay {
         width: 95%;
-        height: 80vh; 
-        max-height: 500px;
+        height: 50vh; 
+        max-height: 400px;
+        max-width: 700px;
     }
 
     .side-label {
@@ -383,8 +385,10 @@ button:hover {
     }
 
     .challenger-list {
-      grid-template-columns: 1fr 1fr; 
+      flex-direction: row; 
       width: 80%; 
+      flex-wrap: wrap; 
+      justify-content: center;
     }
     
     .challenger {
