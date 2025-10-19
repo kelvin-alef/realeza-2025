@@ -32,7 +32,6 @@ header #title {
   justify-content: center;
 }
 
-/* Novo estilo para o título da tela de configuração */
 .setup-title {
     margin: 20px 0;
 }
@@ -237,6 +236,8 @@ button:hover {
   width: 90%; 
   max-width: 200px; 
   min-width: 100px;
+  border: 3px solid gold;
+  box-shadow: 0 0 10px gold;
 }
 
 #kingCard p { 
@@ -363,13 +364,10 @@ button:hover {
     color: #ff9900;
 }
 
-
 .rank-item.king-rank span:nth-child(2) {
     border: 3px solid gold;
     box-shadow: 0 0 8px gold;
 }
-
-/* ESTILOS DA TELA DE RESULTADOS */
 
 #resultsScreen {
     justify-content: flex-start;
@@ -377,7 +375,7 @@ button:hover {
     padding: 20px;
     background-color: #0b141d;
     text-align: center;
-    overflow-y: auto; /* Permite rolagem */
+    overflow-y: auto;
 }
 
 .results-container {
@@ -390,8 +388,8 @@ button:hover {
 }
 
 #tournamentHistoryDisplay {
-    max-height: 60vh; /* Limita a altura do histórico */
-    overflow-y: auto; /* Adiciona barra de rolagem ao histórico */
+    max-height: 60vh;
+    overflow-y: auto;
     padding: 10px;
     border: 1px solid #334455;
     border-radius: 8px;
@@ -402,7 +400,7 @@ button:hover {
 .round-summary-card {
     margin-bottom: 20px;
     padding: 10px 0;
-    border-bottom: 3px solid #334455; /* Separador entre rodadas */
+    border-bottom: 3px solid #334455;
 }
 
 .round-summary-card:last-child {
