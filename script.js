@@ -1,6 +1,6 @@
 let teams = [];
 let kingIndex = 0;
-let totalGameDuration = 0; // Duração total em segundos
+let totalGameDuration = 0; 
 let timerInterval = null;
 let timeLeft;
 
@@ -24,7 +24,6 @@ function createTeamInput(index) {
 
 document.getElementById("addTeam").addEventListener("click", () => {
   const count = document.querySelectorAll(".team-input").length;
-  // Use um índice baseado no tempo para garantir unicidade
   teamsContainer.appendChild(createTeamInput(Date.now())); 
 });
 
@@ -50,7 +49,6 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
   renderRanking();
   updateTimerDisplay(); 
   
-  // Reseta o visual do botão do cronômetro
   startTimerBtn.textContent = '▶️';
   startTimerBtn.style.color = '#ff9900';
   timeValueEl.style.color = '#fff';
@@ -65,8 +63,9 @@ const rankingListEl = document.getElementById("rankingList");
 function renderTeams() {
   const king = teams[kingIndex];
   
-  // NOVO: Aplica a cor de fundo e o texto do Rei
+  // MODIFICADO: Aplica a cor de fundo do time do Rei
   kingCardEl.style.backgroundColor = king.color;
+  kingCardEl.style.color = '#000'; // Define a cor do texto para contrastar com o fundo
   kingNameEl.textContent = king.name;
 
   challengerListEl.innerHTML = "";
@@ -74,8 +73,10 @@ function renderTeams() {
     if (i !== kingIndex) {
       const div = document.createElement("div");
       div.classList.add("challenger");
+      
       // Aplica a cor de fundo do desafiante
       div.style.backgroundColor = team.color;
+      div.style.color = '#000'; // Define a cor do texto para contrastar com o fundo
       
       div.innerHTML = `<p>${team.name}</p>`;
       
@@ -107,8 +108,9 @@ function renderRanking() {
   sorted.forEach((team, index) => {
     const div = document.createElement("div");
     div.classList.add("rank-item");
-    // O fundo do rank-item é o #334455, mas o nome do time tem seu próprio fundo
     
+    // O span:nth-child(2) é o nome do time
+    // O span:nth-child(3) são os pontos
     div.innerHTML = `
         <span>${index + 1}.</span>
         <span style="background-color: ${team.color}; color: #000; text-shadow: none;">${team.name}</span>
@@ -179,10 +181,8 @@ function nextRound() {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = null;
     
-    // Limpeza da tela de configuração
     teamsContainer.innerHTML = ''; 
     
-    // Adiciona times iniciais padrão
     teamsContainer.appendChild(createTeamInput(1));
     teamsContainer.appendChild(createTeamInput(2));
     teamsContainer.appendChild(createTeamInput(3));
@@ -191,7 +191,6 @@ function nextRound() {
     gameScreen.classList.remove("active");
     setupScreen.classList.add("active");
     
-    // Reseta o visual do botão do cronômetro
     startTimerBtn.textContent = '▶️';
     startTimerBtn.style.color = '#ff9900';
     timeValueEl.style.color = '#fff';
@@ -200,7 +199,6 @@ function nextRound() {
 nextRoundBtn.addEventListener("click", nextRound);
 
 
-// Inicializa a tela de configuração com times de exemplo
 document.addEventListener('DOMContentLoaded', () => {
     if (teamsContainer.children.length === 0) {
         teamsContainer.appendChild(createTeamInput(1));

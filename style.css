@@ -141,73 +141,69 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
     font-weight: bold;
     font-size: 1.4rem;
     color: #ffd700;
-    /* NOVO: Posicionamento absoluto dentro de #courtDisplay */
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
 }
 
+/* MODIFICADO: Posição do LADO REALEZA (Top Label) */
 .top-label {
-    top: 5px; /* Posição no topo */
+    top: 5px; /* Posição na linha de fundo superior */
 }
 
 .bottom-label {
-    bottom: 5px; /* Posição na base */
+    bottom: 5px; /* Posição na linha de fundo inferior */
 }
 
 /* NOVO: Estilo da Caixa do Time (Rei e Desafiantes) */
 .team-card, .challenger {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.7); /* Cor de fundo definida por JS */
     color: #fff;
-    border: 3px solid #ff9900; /* Borda para destacar */
+    border: 3px solid #ff9900; 
     font-weight: 700;
     font-size: 1.1rem; 
-    padding: 10px 5px; /* Mais espaço vertical */
+    padding: 10px 5px; 
     text-align: center; 
     border-radius: 5px;
-    text-shadow: 1px 1px 2px #000; /* Sombra para melhorar legibilidade */
+    text-shadow: 1px 1px 2px #000;
 }
 
 /* Layout dos Times DENTRO da Quadra */
 #kingSide, #challengerSide {
     width: 100%;
-    /* Flex grow/shrink/basis para posicionar no espaço */
 }
 
 #kingSide {
-    /* Ocupa a metade superior */
     flex: 1 1 50%; 
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Alinhar na parte superior da quadra */
+    padding-top: 50px; /* Ajuste para não colidir com o label superior */
 }
 
 #challengerSide {
-    /* Ocupa a metade inferior */
     flex: 1 1 50%; 
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* Alinhar na parte inferior da quadra */
-    padding-bottom: 50px; /* Ajuste para não colidir com o label inferior */
+    align-items: flex-end; 
+    padding-bottom: 50px; 
 }
 
-
-/* Destaque do Nome do Rei */
+/* MODIFICADO: kingCard com estilo similar aos desafiantes */
 #kingCard {
-  /* Substitui os estilos anteriores, usa o estilo .team-card */
-  background: transparent !important; /* Cor real virá do JS */
+  background: transparent !important; 
   border: 3px solid gold;
   box-shadow: 0 0 10px gold;
-  font-size: 2.8rem;
+  font-size: 2.5rem; /* Levemente menor que o anterior */
   font-weight: 900;
   color: white;
   margin: 0;
   padding: 15px 20px;
   width: auto;
   min-width: 150px;
+  /* Cor de fundo e borda será definida pelo JS */
 }
-#kingCard p { margin: 0; }
 
 /* Organização dos Desafiantes */
 .challenger-list {
@@ -233,16 +229,12 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
     font-size: 1.2rem;
 }
 
-/* Placar geral (Lado Direito) */
-/* ... (estilos existentes) ... */
-
-/* Estilos para o grupo de tempo e botão de play */
-.timer-display-group {
+/* MODIFICADO: Espaçamento para o botão de pontuação */
+#courtFooter {
     display: flex;
+    gap: 20px;
     align-items: center;
-    justify-content: center; /* Centraliza o grupo */
-    gap: 10px;
-    margin-bottom: 20px;
+    margin-top: 25px; /* Aumentado o espaçamento */
 }
 
 /* MODIFICADO: Botão de Play sem fundo, apenas ícone */
@@ -274,7 +266,7 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
     border-radius: 5px;
 }
 
-/* Ranking Geral (AJUSTADO PARA O NOVO ESTILO RETANGULAR) */
+/* Ranking Geral (AJUSTADO PARA ALINHAR OS PONTOS À DIREITA) */
 #rankingList {
     display: flex;
     flex-direction: column;
@@ -282,9 +274,9 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
 }
 .rank-item {
   display: grid;
-  grid-template-columns: 0.5fr 3fr 1fr; /* Posição | Nome | Pontos */
+  grid-template-columns: 0.5fr 3fr 1fr; 
   align-items: center;
-  padding: 5px 10px; /* Altura mais afinada */
+  padding: 5px 10px;
   border-radius: 5px;
   font-size: 1rem;
   background-color: #334455;
@@ -297,5 +289,12 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
     padding: 5px 10px;
     border-radius: 5px;
     text-align: center;
-    /* A cor de fundo será definida pelo JS */
+}
+
+/* NOVO: Alinhamento dos pontos (terceira coluna) */
+.rank-item span:nth-child(3) {
+    text-align: right;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff9900;
 }
