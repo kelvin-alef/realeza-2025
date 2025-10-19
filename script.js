@@ -237,7 +237,7 @@ downloadResultsBtn.addEventListener("click", downloadResultsAsImage);
 
 window.resolveTie = function(roundIndex, winnerId) {
     const round = tournamentHistory[roundIndex];
-    round.manualWinnerId = winnerId;
+    round.manualWinnerId = parseInt(winnerId);
     
     renderTournamentHistory();
 }
