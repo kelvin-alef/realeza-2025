@@ -391,7 +391,7 @@ button:hover {
     }
     
     #kingCard {
-        font-size: 1rem; /* Redefinido para manter a proporção com o .challenger p */
+        font-size: 1rem;
         padding: 8px 10px;
         min-width: 120px;
     }
