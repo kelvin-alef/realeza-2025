@@ -116,6 +116,7 @@ button:hover {
 .main-container {
   display: flex;
   flex: 1; 
+  height: calc(100vh - 84px); 
 }
 
 #court {
@@ -144,8 +145,8 @@ button:hover {
   background-repeat: no-repeat;
   background-position: center center;
   width: 90%;
-  height: 85vh; 
-  max-height: 800px;
+  flex-grow: 1; 
+  max-height: 800px; 
   position: relative;
   border-radius: 10px;
   box-shadow: 0 0 30px rgba(255, 165, 0, 0.5), inset 0 0 50px rgba(255, 165, 0, 0.3); 
@@ -155,6 +156,7 @@ button:hover {
   align-items: center;
   justify-content: space-between;
   padding: 10px 0;
+  margin-top: 10px; 
 }
 
 .side-label {
@@ -295,7 +297,7 @@ button:hover {
 }
 
 #timer {
-    font-size: 1rem; 
+    font-size: 1.1rem; 
     font-weight: bold;
     color: #fff; 
     background: none; 
@@ -332,7 +334,7 @@ button:hover {
     text-align: center;
     color: white !important; 
     text-shadow: 1px 1px 2px #000;
-    border: 2px solid #000;
+    border: 3px solid #000;
     text-transform: uppercase;
 }
 
