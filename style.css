@@ -460,7 +460,6 @@ button:hover {
 
 .results-table .header, .results-table .row {
     display: grid;
-    /* 5 COLUNAS: Posição, Time, Pontos, Tempo, Botão */
     grid-template-columns: 0.4fr 1.8fr 1fr 1.3fr 1fr;
     padding: 10px;
     border-radius: 5px;
@@ -494,7 +493,6 @@ button:hover {
     color: #ff9900;
 }
 
-/* NOVOS ESTILOS PARA DESEMPATE */
 .tied-rank {
     border: 3px solid #ff0000;
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
@@ -533,7 +531,6 @@ button:hover {
     padding-top: 10px; 
 }
 
-/* MELHORIA NA RESPONSIVIDADE MOBILE */
 @media (max-width: 1000px) {
     
     #titleImage {
@@ -543,7 +540,7 @@ button:hover {
     .main-container {
         flex-direction: column;
         height: auto; 
-        padding: 0 5px; /* Adiciona um pequeno padding horizontal */
+        padding: 0 5px; 
     }
     
     #court {
@@ -551,9 +548,9 @@ button:hover {
     }
     
     #courtDisplay {
-        width: 100%; /* Usa largura total */
+        width: 100%; 
         max-width: none;
-        height: 45vh; /* Altura ajustada */
+        height: 45vh; 
         max-height: 350px;
     }
 
@@ -566,7 +563,7 @@ button:hover {
     }
     
     #scoreBoard {
-        min-width: 100%; /* Garante fluidez no mobile */
+        min-width: 100%; 
         padding: 15px 10px;
         box-shadow: none;
     }
@@ -576,29 +573,28 @@ button:hover {
     }
     
     .rank-item span:nth-child(2) {
-        font-size: 1rem; /* Fonte menor */
+        font-size: 1rem; 
         padding: 3px 5px;
     }
     
     .rank-item span:nth-child(3) {
-        font-size: 1rem; /* Fonte menor */
+        font-size: 1rem; 
     }
 
     .results-table .header, .results-table .row {
-        /* Posição, Time, Pontos, Botão. TEMPO REALEZA (4ª coluna CSS) é escondida. */
-        grid-template-columns: 0.4fr 2fr 0.8fr 1.2fr; /* Colunas otimizadas para mobile */
+        grid-template-columns: 0.4fr 2fr 0.8fr 1.2fr; 
         font-size: 0.65rem;
         padding: 6px 4px;
     }
     
     .results-table .header span:nth-child(4), 
     .results-table .row span:nth-child(4) {
-        display: none; /* Esconde Tempo Realeza (4ª coluna original) */
+        display: none; 
     }
 
     .results-table .header span:nth-child(5), 
     .results-table .row span:nth-child(5) {
-        display: block; /* Mostra o Botão (5ª coluna original, 4ª visível) */
+        display: block; 
     }
 
     .tiebreaker-btn {
@@ -621,7 +617,6 @@ button:hover {
         max-height: calc(100vh - 20px);
     }
     
-    /* Configuração */
     .team-input input[type="text"] {
         width: 120px; 
     }

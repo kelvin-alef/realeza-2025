@@ -235,6 +235,13 @@ startTimerBtn.addEventListener("click", startTimer);
 showResultsBtn.addEventListener("click", showResultsScreen);
 downloadResultsBtn.addEventListener("click", downloadResultsAsImage);
 
+window.resolveTie = function(roundIndex, winnerId) {
+    const round = tournamentHistory[roundIndex];
+    round.manualWinnerId = winnerId;
+    
+    renderTournamentHistory();
+}
+
 function showResultsScreen() {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = null;
@@ -297,13 +304,6 @@ function showResultsScreen() {
     
     gameScreen.classList.remove("active");
     resultsScreen.classList.add("active");
-}
-
-window.resolveTie = function(roundIndex, winnerId) {
-    const round = tournamentHistory[roundIndex];
-    round.manualWinnerId = winnerId;
-    
-    renderTournamentHistory();
 }
 
 function renderTournamentHistory() {
@@ -393,7 +393,7 @@ function renderTournamentHistory() {
         const winnerId = lastRound.manualWinnerId || lastRound.winnerId;
         startNewRoundBtn.dataset.winnerId = winnerId;
         startNewRoundBtn.disabled = teams.length <= 2;
-        startNewRoundBtn.textContent = teams.length <= 2 ? "Última Rodada Finalizada!" : "Iniciar Próximo Round (Remover Vencedor)";
+        startNewRoundBtn.textContent = teams.length <= 2 ? "Última Rodada Finalizada!" : "Iniciar Próximo Round";
     }
 }
 
