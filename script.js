@@ -235,7 +235,7 @@ startTimerBtn.addEventListener("click", startTimer);
 showResultsBtn.addEventListener("click", showResultsScreen);
 downloadResultsBtn.addEventListener("click", downloadResultsAsImage);
 
-window.resolveTie = function(roundIndex, winnerId) {
+function resolveTie(roundIndex, winnerId) {
     const round = tournamentHistory[parseInt(roundIndex)];
     round.manualWinnerId = parseInt(winnerId);
     
@@ -356,7 +356,7 @@ function renderTournamentHistory() {
             if (round.isTie && round.tiedTeamIds.includes(team.id)) {
                 if (!round.manualWinnerId && isLatestRound) {
                     rowClasses += " tied-rank";
-                    actionHtml = `<button class="tiebreaker-btn" onclick="resolveTie('${roundIndex}', '${team.id}')">Vencedor</button>`;
+                    actionHtml = `<button class="tiebreaker-btn" data-round-index="${roundIndex}" data-winner-id="${team.id}">Vencedor</button>`;
                 } else if (round.manualWinnerId === team.id) {
                     rowClasses += " final-winner-highlight";
                 }
@@ -468,6 +468,15 @@ function resetGame() {
 
 startNewRoundBtn.addEventListener("click", startNewRound);
 resetGameBtn.addEventListener("click", resetGame);
+
+tournamentHistoryDisplayEl.addEventListener('click', (e) => {
+    if (e.target.classList.contains('tiebreaker-btn')) {
+        const roundIndex = e.target.dataset.roundIndex;
+        const winnerId = e.target.dataset.winnerId;
+        
+        resolveTie(roundIndex, winnerId);
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     if (teamsContainer.children.length === 0) {
