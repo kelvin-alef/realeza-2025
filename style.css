@@ -26,14 +26,16 @@ header {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
 }
 
-header h1 {
-  font-size: 3rem;
-  font-weight: 700;
+header #title {
   display: flex;
   align-items: center;
-  gap: 15px;
-  color: #fff;
-  text-shadow: 2px 2px #000;
+  justify-content: center;
+}
+
+#titleImage {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
 }
 
 #setupScreen {
@@ -353,8 +355,8 @@ button:hover {
 
 @media (max-width: 1000px) {
     
-    header h1 {
-        font-size: 2rem;
+    #titleImage {
+        height: 35px;
     }
     
     .main-container {
