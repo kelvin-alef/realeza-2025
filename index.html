@@ -18,10 +18,10 @@
           <label for="gameDuration">Duração da Partida (minutos):</label>
           <input type="number" id="gameDuration" value="15" min="1" required>
       </div>
-      
-      <div class="tiebreaker-config">
-          <input type="checkbox" id="useTimeAsTiebreaker" checked>
-          <label for="useTimeAsTiebreaker">Usar Tempo de Realeza como critério de desempate automático (após pontos)?</label>
+
+      <div class="timer-config" style="margin-top: 15px;">
+        <input type="checkbox" id="useTimeTieBreaker" checked>
+        <label for="useTimeTieBreaker">Usar "Tempo de Realeza" como critério de desempate automático (após Pontos)</label>
       </div>
       <button type="submit" class="start-btn">Iniciar Partida</button>
     </form>
@@ -42,8 +42,8 @@
           <span id="kingSideLabel" class="side-label top-label">LADO REALEZA 👑</span>
           
           <div id="kingSide">
-            <div id=\"kingCard\" class=\"team-card king\">
-              <p id=\"kingName\"></p>
+            <div id="kingCard" class="team-card king">
+              <p id="kingName"></p>
             </div>
           </div>
           
@@ -70,7 +70,7 @@
             <p id="timer">TEMPO RESTANTE: <span id="timeValue">00:00</span></p>
             <button id="startTimerBtn" class="action-btn timer-control-btn">▶️</button>
           </div>
-          <button id="showResultsBtn" class="action-btn">Finalizar Rodada e Ver Resultados</button>
+          <button id="showResultsBtn" class="action-btn">Finalizar Round e Ver Resultados</button>
         </div>
       </div>
     </main>
@@ -78,26 +78,22 @@
 
   <div id="resultsScreen" class="screen">
     <header>
-      <div id="title">
-        <img id="titleImage" src="bola.png" alt="Realeza 2025">
-        <h1>RESULTADOS</h1>
-      </div>
+      <h1 id="title">
+        👑 Resultados do Torneio
+      </h1>
     </header>
-    
     <div class="results-container">
-        <h1>🏆 Histórico do Torneio</h1>
         <div id="tournamentHistoryDisplay">
             </div>
-        
         <div class="results-actions">
-            <button id="startNewRoundBtn" class="action-btn-full start-btn" disabled>Iniciar Próximo Round (Remover Vencedor)</button>
-            <button id="downloadResultsBtn" class="action-btn-full action-btn">Baixar Imagem dos Resultados</button>
-            <button id="resetGameBtn" class="action-btn-full remove-btn">Voltar para Cadastro de Equipes</button>
+            <button id="startNewRoundBtn" class="action-btn-full action-btn">Iniciar Próximo Round (Remover Vencedor)</button>
+            <button id="downloadResultsBtn" class="action-btn-full action-btn">Baixar Resultados</button>
+            <button id="resetGameBtn" class="action-btn-full start-btn">Voltar para Cadastro de Equipes</button>
         </div>
     </div>
   </div>
 
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script src="script.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </body>
 </html>

@@ -4,14 +4,13 @@ let totalGameDuration = 0;
 let timerInterval = null;
 let timeLeft;
 let tournamentHistory = [];
-let useTimeAsTiebreaker = true; // Variável global para a nova configuração
+let useTimeTieBreaker = true; 
 
 const setupScreen = document.getElementById("setupScreen");
 const gameScreen = document.getElementById("gameScreen");
 const resultsScreen = document.getElementById("resultsScreen"); 
 const teamsContainer = document.getElementById("teamsContainer");
 const gameDurationInput = document.getElementById("gameDuration"); 
-const useTimeAsTiebreakerCheckbox = document.getElementById("useTimeAsTiebreaker"); // Novo elemento
 const startTimerBtn = document.getElementById("startTimerBtn");
 const addPointsBtn = document.getElementById("addPoints");
 const timeValueEl = document.getElementById("timeValue");
@@ -25,6 +24,7 @@ const startNewRoundBtn = document.getElementById("startNewRoundBtn");
 const resetGameBtn = document.getElementById("resetGameBtn");
 const downloadResultsBtn = document.getElementById("downloadResultsBtn");
 const resultsContainerEl = document.getElementById("resultsContainer");
+const useTimeTieBreakerCheckbox = document.getElementById("useTimeTieBreaker");
 
 function createTeamInput(index) {
   const div = document.createElement("div");
@@ -49,6 +49,8 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
       teams = [];
       tournamentHistory = []; 
   }
+  
+  useTimeTieBreaker = useTimeTieBreakerCheckbox.checked;
 
   const inputs = teamsContainer.querySelectorAll(".team-input");
   inputs.forEach((input, i) => {
@@ -72,9 +74,6 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
 
   totalGameDuration = parseInt(gameDurationInput.value) * 60; 
   timeLeft = totalGameDuration;
-  
-  // Define a configuração do desempate
-  useTimeAsTiebreaker = useTimeAsTiebreakerCheckbox.checked; 
   
   kingIndex = Math.floor(Math.random() * teams.length);
   
@@ -139,12 +138,7 @@ function renderRanking() {
       if (b.points !== a.points) {
           return b.points - a.points;
       }
-      
-      // Usa o tempo de realeza como critério secundário APENAS se a opção estiver ativada
-      if (useTimeAsTiebreaker) {
-          return b.timeAsKing - a.timeAsKing; 
-      }
-      return 0; // Se desativado, mantém a ordem atual (necessita desempate manual se for o topo)
+      return b.timeAsKing - a.timeAsKing; 
   });
   rankingListEl.innerHTML = "";
 
@@ -241,21 +235,13 @@ function showResultsScreen() {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = null;
     
-    // Define a função de classificação baseada na configuração
-    const sortFunction = (a, b) => {
+    const sortedFinal = [...teams].sort((a,b) => {
         if (b.points !== a.points) {
             return b.points - a.points;
         }
-        // Aplica o Tempo de Realeza como critério secundário apenas se a opção estiver marcada
-        if (useTimeAsTiebreaker) {
-            return b.timeAsKing - a.timeAsKing; 
-        }
-        return 0;
-    };
+        return b.timeAsKing - a.timeAsKing; 
+    });
     
-    const sortedFinal = [...teams].sort(sortFunction);
-    
-    // --- Lógica de Detecção de Empate Absoluto ---
     let tieBreakerNeeded = false;
     let tiedTeams = [];
     
@@ -263,20 +249,21 @@ function showResultsScreen() {
         const topScore = sortedFinal[0].points;
         const topTime = sortedFinal[0].timeAsKing;
         
-        // Critério de empate:
-        // 1. Sempre exige desempate manual se os pontos forem iguais E a opção de tempo estiver DESATIVADA
-        // 2. Exige desempate manual se os pontos forem iguais E a opção de tempo estiver ATIVADA E o tempo também for igual
-        
-        tiedTeams = sortedFinal.filter(team => 
-            team.points === topScore && 
-            (useTimeAsTiebreaker ? team.timeAsKing === topTime : true)
-        );
+        if (useTimeTieBreaker) {
+            tiedTeams = sortedFinal.filter(team => 
+                team.points === topScore && team.timeAsKing === topTime
+            );
+        } 
+        else {
+             tiedTeams = sortedFinal.filter(team => 
+                team.points === topScore
+            );
+        }
         
         if (tiedTeams.length > 1) {
             tieBreakerNeeded = true;
         }
     }
-    // ---------------------------------------------
 
     const winner = sortedFinal[0];
     
@@ -301,7 +288,6 @@ function showResultsScreen() {
     gameScreen.classList.remove("active");
     resultsScreen.classList.add("active"); 
     
-    // Configura o botão de Próximo Round
     if (tieBreakerNeeded) {
         startNewRoundBtn.disabled = true;
         startNewRoundBtn.textContent = "Selecione o Vencedor do Desempate Acima";
@@ -327,7 +313,6 @@ function renderTournamentHistory() {
         let titleHtml;
         let tieBreakerHtml = '';
         
-        // Verifica se é o round atual e precisa de desempate manual
         if (round.tieBreakerNeeded && (roundIndex === tournamentHistory.length - 1)) {
             
             titleHtml = `
@@ -352,7 +337,6 @@ function renderTournamentHistory() {
             tieBreakerHtml += `</div>`;
             
         } else {
-            // Caso de vitória normal ou empate já resolvido manualmente
             titleHtml = `
                 <h2>ROUND ${round.roundNumber}: ${round.winnerName} VENCEU! 🥇</h2>
             `;
@@ -394,15 +378,12 @@ function selectTieWinner(teamId, roundNumber) {
     const winnerTeam = teams.find(t => t.id === teamId);
     
     if (round.tiedTeams.some(t => t.id === teamId)) {
-        // 1. Atualiza o histórico da rodada com o vencedor manual
         round.winnerId = teamId;
         round.winnerName = winnerTeam.name.toUpperCase();
-        round.tieBreakerNeeded = false; // Empate resolvido
+        round.tieBreakerNeeded = false; 
         
-        // 2. Re-renderiza o histórico para mostrar o resultado
         renderTournamentHistory();
         
-        // 3. Atualiza o botão de Próximo Round
         startNewRoundBtn.dataset.winnerId = teamId;
         startNewRoundBtn.disabled = teams.length <= 2;
         if (teams.length <= 2) {
@@ -483,6 +464,8 @@ function resetGame() {
     teamsContainer.appendChild(createTeamInput(3));
     gameDurationInput.value = 15;
     
+    useTimeTieBreakerCheckbox.checked = true;
+
     resultsScreen.classList.remove("active");
     setupScreen.classList.add("active");
 }

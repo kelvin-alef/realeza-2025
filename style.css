@@ -69,7 +69,6 @@ header #title {
     border-radius: 5px;
 }
 
-/* NOVO ESTILO: Configuração do Desempate */
 .tiebreaker-config {
     display: flex;
     align-items: center;
@@ -83,7 +82,6 @@ header #title {
     width: 20px;
     height: 20px;
 }
-/* FIM NOVO ESTILO */
 
 .team-input {
   display: flex;
@@ -391,7 +389,6 @@ button:hover {
     box-shadow: 0 0 8px gold;
 }
 
-/* --- TELA DE RESULTADOS --- */
 #resultsScreen {
     justify-content: flex-start;
     align-items: center;
