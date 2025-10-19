@@ -83,7 +83,7 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
   renderRanking();
   updateTimerDisplay(); 
   
-  document.getElementById("showResultsBtn").disabled = false;
+  document.getElementById("showResultsBtn").disabled = true; 
   addPointsBtn.disabled = true;
   
   startTimerBtn.textContent = '▶️';
@@ -190,7 +190,7 @@ function updateTimerDisplay() {
         timeDisplayContainer.style.color = '#00cc66';
     } else if (timeLeft <= 0) {
         timeDisplayContainer.style.color = 'red';
-        document.getElementById("showResultsBtn").disabled = false;
+        document.getElementById("showResultsBtn").disabled = false; 
     }
 }
 
@@ -204,7 +204,7 @@ function startTimer() {
         return;
     }
     
-    document.getElementById("showResultsBtn").disabled = true;
+    document.getElementById("showResultsBtn").disabled = true; // Ação restaurada: desabilita ao iniciar
 
     if (timeLeft <= 0) {
         timeLeft = totalGameDuration;
