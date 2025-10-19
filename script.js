@@ -4,12 +4,14 @@ let totalGameDuration = 0;
 let timerInterval = null;
 let timeLeft;
 let tournamentHistory = [];
+let useTimeTiebreaker = true;
 
 const setupScreen = document.getElementById("setupScreen");
 const gameScreen = document.getElementById("gameScreen");
 const resultsScreen = document.getElementById("resultsScreen"); 
 const teamsContainer = document.getElementById("teamsContainer");
 const gameDurationInput = document.getElementById("gameDuration"); 
+const useTimeTiebreakerInput = document.getElementById("useTimeTiebreaker");
 const startTimerBtn = document.getElementById("startTimerBtn");
 const addPointsBtn = document.getElementById("addPoints");
 const timeValueEl = document.getElementById("timeValue");
@@ -29,7 +31,7 @@ function createTeamInput(index) {
   div.classList.add("team-input");
   div.innerHTML = `
     <input type="text" id="teamName${index}" placeholder="Nome do time" required>
-    <input type="color" id="teamColor${index}" value="#${Math.floor(Math.random()*16777215).toString(16)}">
+    <input type="color" id="teamColor${index}" value="#${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')}">
     <button type="button" class="remove-btn">Remover</button>
   `;
   div.querySelector(".remove-btn").addEventListener("click", () => div.remove());
@@ -68,6 +70,8 @@ document.getElementById("teamForm").addEventListener("submit", (e) => {
   
   if (teams.length < 2) { alert("Adicione pelo menos 2 times!"); return; }
 
+  useTimeTiebreaker = useTimeTiebreakerInput.checked; 
+    
   totalGameDuration = parseInt(gameDurationInput.value) * 60; 
   timeLeft = totalGameDuration;
   
@@ -134,7 +138,11 @@ function renderRanking() {
       if (b.points !== a.points) {
           return b.points - a.points;
       }
-      return b.timeAsKing - a.timeAsKing; 
+      
+      if (useTimeTiebreaker) {
+          return b.timeAsKing - a.timeAsKing; 
+      }
+      return 0;
   });
   rankingListEl.innerHTML = "";
 
@@ -235,7 +243,11 @@ function showResultsScreen() {
         if (b.points !== a.points) {
             return b.points - a.points;
         }
-        return b.timeAsKing - a.timeAsKing; 
+        
+        if (useTimeTiebreaker) {
+            return b.timeAsKing - a.timeAsKing; 
+        }
+        return 0;
     });
     
     const winner = sortedFinal[0];
@@ -372,6 +384,7 @@ function resetGame() {
     teamsContainer.appendChild(createTeamInput(2));
     teamsContainer.appendChild(createTeamInput(3));
     gameDurationInput.value = 15;
+    useTimeTiebreakerInput.checked = true;
     
     resultsScreen.classList.remove("active");
     setupScreen.classList.add("active");

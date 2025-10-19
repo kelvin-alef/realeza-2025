@@ -17,10 +17,17 @@
     <form id="teamForm">
       <div id="teamsContainer"></div>
       <button type="button" id="addTeam">+ Adicionar Time</button>
+      
       <div class="timer-config">
           <label for="gameDuration">Duração da Partida (minutos):</label>
           <input type="number" id="gameDuration" value="15" min="1" required>
       </div>
+
+      <div class="tiebreaker-config">
+          <input type="checkbox" id="useTimeTiebreaker" checked>
+          <label for="useTimeTiebreaker">Usar Tempo de Realeza como Critério de Desempate</label>
+      </div>
+      
       <button type="submit" class="start-btn">Iniciar Partida</button>
     </form>
   </div>
