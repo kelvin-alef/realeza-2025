@@ -238,18 +238,40 @@ function showResultsScreen() {
         return b.timeAsKing - a.timeAsKing; 
     });
     
+    // --- Lógica de Detecção de Empate Absoluto ---
+    let tieBreakerNeeded = false;
+    let tiedTeams = [];
+    
+    if (sortedFinal.length >= 2) {
+        const topScore = sortedFinal[0].points;
+        const topTime = sortedFinal[0].timeAsKing;
+        
+        // Filtra todos os times que estão empatados com o time do topo (mesmo ponto E mesmo tempo)
+        tiedTeams = sortedFinal.filter(team => 
+            team.points === topScore && team.timeAsKing === topTime
+        );
+        
+        if (tiedTeams.length > 1) {
+            tieBreakerNeeded = true;
+        }
+    }
+    // ---------------------------------------------
+
     const winner = sortedFinal[0];
     
     const roundResult = {
         roundNumber: tournamentHistory.length + 1,
-        winnerName: winner.name.toUpperCase(),
+        // O vencedor é temporariamente o 1º da lista, será corrigido se houver desempate manual
+        winnerName: winner.name.toUpperCase(), 
         winnerId: winner.id,
         summary: sortedFinal.map(team => ({
             name: team.name,
             color: team.color,
             points: team.points,
             time: team.timeAsKing,
-        }))
+        })),
+        tieBreakerNeeded: tieBreakerNeeded, 
+        tiedTeams: tieBreakerNeeded ? tiedTeams.map(t => ({ id: t.id, name: t.name, color: t.color })) : [] 
     };
     
     tournamentHistory.push(roundResult);
@@ -257,28 +279,64 @@ function showResultsScreen() {
     renderTournamentHistory();
     
     gameScreen.classList.remove("active");
-    resultsScreen.classList.add("active");
+    resultsScreen.classList.add("active"); 
     
-    startNewRoundBtn.dataset.winnerId = winner.id;
-    
-    startNewRoundBtn.disabled = teams.length <= 2;
-    if (teams.length <= 2) {
-        startNewRoundBtn.textContent = "Última Rodada Finalizada!";
+    // Configura o botão de Próximo Round
+    if (tieBreakerNeeded) {
+        startNewRoundBtn.disabled = true;
+        startNewRoundBtn.textContent = "Selecione o Vencedor do Desempate Acima";
+        startNewRoundBtn.dataset.winnerId = ''; // Limpa o winnerId até a seleção
     } else {
-        startNewRoundBtn.textContent = "Iniciar Próximo Round (Remover Vencedor)";
+        startNewRoundBtn.dataset.winnerId = winner.id;
+        startNewRoundBtn.disabled = teams.length <= 2;
+        if (teams.length <= 2) {
+            startNewRoundBtn.textContent = "Última Rodada Finalizada!";
+        } else {
+            startNewRoundBtn.textContent = "Iniciar Próximo Round (Remover Vencedor)";
+        }
     }
 }
 
 function renderTournamentHistory() {
     tournamentHistoryDisplayEl.innerHTML = '';
     
-    tournamentHistory.forEach(round => {
+    tournamentHistory.forEach((round, roundIndex) => {
         const roundDiv = document.createElement("div");
         roundDiv.classList.add("round-summary-card");
         
-        const titleHtml = `
-            <h2>ROUND ${round.roundNumber}: ${round.winnerName} VENCEU! 🥇</h2>
-        `;
+        let titleHtml;
+        let tieBreakerHtml = '';
+        
+        // Verifica se é o round atual e precisa de desempate manual
+        if (round.tieBreakerNeeded && (roundIndex === tournamentHistory.length - 1)) {
+            
+            titleHtml = `
+                <h2 style="color: red;">🚨 EMPATE ABSOLUTO NO ROUND ${round.roundNumber}! </h2>
+                <p style="font-weight: bold; color: #ff9900;">Escolha o time que VENCEU o desempate para que ele seja removido:</p>
+            `;
+            
+            tieBreakerHtml = `
+                <div class="tie-breaker-selection" style="display: flex; flex-direction: column; gap: 5px; margin: 10px 0;">
+            `;
+            
+            round.tiedTeams.forEach(team => {
+                tieBreakerHtml += `
+                    <button 
+                        style="background-color: ${team.color}; color: black; font-weight: bold; border: 3px solid white; padding: 10px; cursor: pointer;"
+                        onclick="selectTieWinner(${team.id}, ${round.roundNumber})"
+                    >
+                        VENCEDOR: ${team.name.toUpperCase()}
+                    </button>
+                `;
+            });
+            tieBreakerHtml += `</div>`;
+            
+        } else {
+            // Caso de vitória normal ou empate já resolvido manualmente
+            titleHtml = `
+                <h2>ROUND ${round.roundNumber}: ${round.winnerName} VENCEU! 🥇</h2>
+            `;
+        }
         
         let tableHtml = `
             <div class="results-table">
@@ -303,9 +361,40 @@ function renderTournamentHistory() {
         
         tableHtml += `</div><hr class="summary-separator">`;
         
-        roundDiv.innerHTML = titleHtml + tableHtml;
+        roundDiv.innerHTML = titleHtml + tieBreakerHtml + tableHtml;
         tournamentHistoryDisplayEl.appendChild(roundDiv);
     });
+}
+
+// Nova função para resolver o empate
+function selectTieWinner(teamId, roundNumber) {
+    const roundIndex = roundNumber - 1;
+    if (roundIndex < 0 || roundIndex >= tournamentHistory.length) return;
+    
+    const round = tournamentHistory[roundIndex];
+    const winnerTeam = teams.find(t => t.id === teamId);
+    
+    if (round.tiedTeams.some(t => t.id === teamId)) {
+        // 1. Atualiza o histórico da rodada com o vencedor manual
+        round.winnerId = teamId;
+        round.winnerName = winnerTeam.name.toUpperCase();
+        round.tieBreakerNeeded = false; // Empate resolvido
+        
+        // 2. Re-renderiza o histórico para mostrar o resultado
+        renderTournamentHistory();
+        
+        // 3. Atualiza o botão de Próximo Round
+        startNewRoundBtn.dataset.winnerId = teamId;
+        startNewRoundBtn.disabled = teams.length <= 2;
+        if (teams.length <= 2) {
+            startNewRoundBtn.textContent = "Última Rodada Finalizada!";
+        } else {
+            startNewRoundBtn.textContent = "Iniciar Próximo Round (Remover Vencedor)";
+        }
+        
+        // Opcional: feedback visual de que o vencedor foi selecionado
+        // alert(`Time ${winnerTeam.name} selecionado como vencedor do desempate!`);
+    }
 }
 
 function downloadResultsAsImage() {
@@ -337,6 +426,12 @@ function downloadResultsAsImage() {
 
 function startNewRound() {
     const winnerId = parseInt(startNewRoundBtn.dataset.winnerId);
+    
+    // Verifica se o ID do vencedor é válido antes de prosseguir
+    if (isNaN(winnerId)) {
+        alert("Erro: O vencedor da rodada não foi definido ou selecionado (no caso de empate).");
+        return;
+    }
     
     const winnerName = teams.find(t => t.id === winnerId)?.name || "Vencedor";
     
