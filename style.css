@@ -69,6 +69,22 @@ header #title {
     border-radius: 5px;
 }
 
+/* NOVO ESTILO: Configuração do Desempate */
+.tiebreaker-config {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1a2a3a;
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+.tiebreaker-config input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+/* FIM NOVO ESTILO */
+
 .team-input {
   display: flex;
   align-items: center;
@@ -398,12 +414,12 @@ button:hover {
     
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 40px); /* Garante que o container cabe na tela */
+    max-height: calc(100vh - 40px); 
 }
 
 #tournamentHistoryDisplay {
     flex-grow: 1; 
-    max-height: calc(100vh - 300px); /* Ajustado para dar mais espaço aos botões e ao título */
+    max-height: calc(100vh - 300px); 
     overflow-y: auto;
     padding: 10px;
     border: 1px solid #334455;
@@ -513,7 +529,7 @@ button:hover {
     }
     
     #tournamentHistoryDisplay {
-        max-height: calc(100vh - 250px); /* Ajuste para telas menores, dando mais espaço aos botões */
+        max-height: calc(100vh - 250px); 
     }
 
     .results-container {

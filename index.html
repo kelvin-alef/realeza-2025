@@ -3,16 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Torneio da Realeza</title>
+  <title>Realeza 2025</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="bola.png" type="image/png">
 </head>
 <body>
   <div id="setupScreen" class="screen active">
-    <div id="title" class="setup-title">
-      <img src="titulo.png" alt="Torneio da Realeza" id="titleImage">
-    </div>
     <h1>⚙️ Configuração dos Times</h1>
     <form id="teamForm">
       <div id="teamsContainer"></div>
@@ -21,38 +18,46 @@
           <label for="gameDuration">Duração da Partida (minutos):</label>
           <input type="number" id="gameDuration" value="15" min="1" required>
       </div>
+      
+      <div class="tiebreaker-config">
+          <input type="checkbox" id="useTimeAsTiebreaker" checked>
+          <label for="useTimeAsTiebreaker">Usar Tempo de Realeza como critério de desempate automático (após pontos)?</label>
+      </div>
       <button type="submit" class="start-btn">Iniciar Partida</button>
     </form>
   </div>
 
   <div id="gameScreen" class="screen">
     <header>
-      <div id="title">
-        <img src="titulo.png" alt="Torneio da Realeza" id="titleImage">
-      </div>
+      <h1 id="title">
+        👑 Realeza 2025
+      </h1>
     </header>
 
     <main class="main-container">
       <div id="court">
-        <div id="courtTitles">
-            <span id="kingSideLabel" class="side-label top-left-label">LADO REALEZA 👑</span>
-            <span id="challengerSideLabel" class="side-label top-right-label">LADO DESAFIANTE ⚔️</span>
-        </div>
-
+        <h2>QUADRA PRINCIPAL</h2>
         <div id="courtDisplay">
           
+          <span id="kingSideLabel" class="side-label top-label">LADO REALEZA 👑</span>
+          
           <div id="kingSide">
-            <div id="kingCard" class="team-card king">
-              <p id="kingName"></p>
+            <div id=\"kingCard\" class=\"team-card king\">
+              <p id=\"kingName\"></p>
             </div>
           </div>
           
           <div id="challengerSide">
             <div id="challengerList" class="challenger-list"></div>
           </div>
+
+          <span id="challengerSideLabel" class="side-label bottom-label">LADO DESAFIANTE ⚔️</span>
           
         </div>
         
+        <div id="courtFooter">
+          <button id="addPoints" class="action-btn">+1 Ponto à Realeza</button>
+        </div>
       </div>
 
       <div id="scoreBoard">
@@ -61,29 +66,33 @@
         <hr>
         
         <div id="infoBoard">
-          <button id="addPoints" class="action-btn action-btn-full" disabled>+1 Ponto à Realeza</button>
-          
           <div class="timer-display-group">
             <p id="timer">TEMPO RESTANTE: <span id="timeValue">00:00</span></p>
             <button id="startTimerBtn" class="action-btn timer-control-btn">▶️</button>
           </div>
-          
-          <button id="showResultsBtn" class="start-btn action-btn-full">Mostrar Resultados</button>
+          <button id="showResultsBtn" class="action-btn">Finalizar Rodada e Ver Resultados</button>
         </div>
       </div>
     </main>
   </div>
-  
-  <div id="resultsScreen" class="screen">
-    <div class="results-container" id="resultsContainer">
-        <h1>🏆 Histórico da Rodada</h1>
-        
-        <div id="tournamentHistoryDisplay"></div>
 
+  <div id="resultsScreen" class="screen">
+    <header>
+      <div id="title">
+        <img id="titleImage" src="bola.png" alt="Realeza 2025">
+        <h1>RESULTADOS</h1>
+      </div>
+    </header>
+    
+    <div class="results-container">
+        <h1>🏆 Histórico do Torneio</h1>
+        <div id="tournamentHistoryDisplay">
+            </div>
+        
         <div class="results-actions">
-            <button id="downloadResultsBtn" class="action-btn action-btn-full">⬇️ Baixar como Imagem (JPG)</button>
-            <button id="startNewRoundBtn" class="start-btn">Iniciar Próximo Round (Remover Vencedor)</button>
-            <button id="resetGameBtn" class="action-btn">Voltar para Cadastro de Equipes</button>
+            <button id="startNewRoundBtn" class="action-btn-full start-btn" disabled>Iniciar Próximo Round (Remover Vencedor)</button>
+            <button id="downloadResultsBtn" class="action-btn-full action-btn">Baixar Imagem dos Resultados</button>
+            <button id="resetGameBtn" class="action-btn-full remove-btn">Voltar para Cadastro de Equipes</button>
         </div>
     </div>
   </div>
