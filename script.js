@@ -356,7 +356,7 @@ function renderTournamentHistory() {
             if (round.isTie && round.tiedTeamIds.includes(team.id)) {
                 if (!round.manualWinnerId && isLatestRound) {
                     rowClasses += " tied-rank";
-                    actionHtml = `<button class="tiebreaker-btn" onclick="resolveTie(${roundIndex}, ${team.id})">Vencedor</button>`;
+                    actionHtml = `<button class="tiebreaker-btn" onclick="resolveTie(${roundIndex}, '${team.id}')">Vencedor</button>`;
                 } else if (round.manualWinnerId === team.id) {
                     rowClasses += " final-winner-highlight";
                 }
